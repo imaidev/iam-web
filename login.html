@@ -29,13 +29,14 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="login.js"></script>
   </head>
 
   <body>
 
     <div class="container">
 
-      <form class="form-signin" action="https://dev.imaicloud.com/couchdb/_session?next=//fogray.github.io/iam-web/logout.html" method="post" enctype="application/x-www-form-urlencoded">
+      <form class="form-signin" action="https://dev.imaicloud.com/couchdb/_session" method="post" enctype="application/x-www-form-urlencoded">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="name" class="sr-only">User Id</label>
         <input type="text" name="name" class="form-control" placeholder="User Id" required autofocus>
@@ -46,7 +47,7 @@
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="button">Sign in</button>
       </form>
 测试用户/口令：  anna/secret
     </div> <!-- /container -->
