@@ -12,7 +12,7 @@ window.onload = function(){
           console.log(xhr.responseText)
         }
       };
-      var name = document.getElementsByName('name')[0], pwd = document.getElementsByName('password')[0];
+      var name = document.getElementsByName('name')[0].value, pwd = document.getElementsByName('password')[0].value;
       xhr.send('name='+name+'&password='+pwd);
       xhr.onload = function(){
           console.log(xhr.responseText);
