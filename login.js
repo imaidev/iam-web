@@ -1,4 +1,4 @@
-document.ready = function(){
+window.onload = function(){
   $('#btnLogin').onclick = function(){
       var url = 'https://dev.imaicloud.com/couchdb/_session';
       var xhr = new XMLHttpRequest();
