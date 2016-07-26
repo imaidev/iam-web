@@ -1,5 +1,5 @@
 window.onload = function(){
-  $('#btnLogin').onclick = function(){
+  document.getElementById('btnLogin').onclick = function(){
       var url = 'https://dev.imaicloud.com/couchdb/_session';
       var xhr = new XMLHttpRequest();
       if (!('withCredentials' in xhr)) {
