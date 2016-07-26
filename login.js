@@ -12,7 +12,7 @@ document.ready = function(){
           console.log(xhr.responseText)
         }
       };
-      var name = document.getElementByName('name'), pwd = .getElementByName('password');
+      var name = document.getElementByName('name'), pwd = document.getElementByName('password');
       xhr.send('name='+name+'&password='+pwd);
       xhr.onload = function(){
           console.log(xhr.responseText);
