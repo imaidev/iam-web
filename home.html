@@ -32,7 +32,7 @@
     <script src="cookie.js"></script>
     <script>
       window.onload = function(){
-          var url = 'https://dev.imaicloud.com/couchdb/_session?AuthSession='+authsession;
+          var url = 'https://dev.imaicloud.com/couchdb/_session';
           var xhr = new XMLHttpRequest();
           if (!('withCredentials' in xhr)) {
               xhr = XDomainRequest();
