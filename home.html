@@ -44,9 +44,8 @@
               if (jsonData.ok) {
                 var userCtx = jsonData.userCtx;
                 var payload = JSON.stringify(userCtx);
-                //setCookie('imaicloud_expires',2147483647);
-                //setCookie('imaicloud_md5','TX7ZNGJJNqtHviTmMr-DDQ');
-                setCookie('imaicloud_user', payload);
+                setCookie('imaicloud_expires',2147483647);
+                setCookie('imaicloud_payload', payload);
                 setCookie('secure_link_md5','yYCuToUyLV2czYK12_4gUA');
                 setCookie('imaicloud_role','_admin,compdev,appdev');
                 document.write('<div class="alert alert-success">登录成功</div><br/><div>'+data+'</div>')
