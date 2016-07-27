@@ -40,7 +40,7 @@
           xhr.open('GET', url, true);
           xhr.send();
           xhr.onload = function(){
-              var data = xhr.responseText, jsonData = eval(data);
+              var data = xhr.responseText, jsonData = eval('('+data+')');
               var userCtx = jsonData.userCtx;
               var payload = (new Base64()).encode(userCtx);
               //setCookie('imaicloud_expires',2147483647);
