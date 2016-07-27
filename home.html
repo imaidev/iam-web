@@ -42,7 +42,7 @@
           xhr.onload = function(){
               var data = xhr.responseText, jsonData = eval('('+data+')');
               var userCtx = jsonData.userCtx;
-              var payload = (new Base64()).encode(userCtx);
+              var payload = JSON.stringify(userCtx);
               //setCookie('imaicloud_expires',2147483647);
               //setCookie('imaicloud_md5','TX7ZNGJJNqtHviTmMr-DDQ');
               setCookie('secure_link_md5','yYCuToUyLV2czYK12_4gUA');
