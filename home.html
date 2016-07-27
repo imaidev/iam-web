@@ -32,8 +32,6 @@
     <script src="cookie.js"></script>
     <script>
       window.onload = function(){
-        var authsession = getCookie('AuthSession');
-        if (authsession) {
           var url = 'https://dev.imaicloud.com/couchdb/_session?AuthSession='+authsession;
           var xhr = new XMLHttpRequest();
           if (!('withCredentials' in xhr)) {
@@ -55,7 +53,6 @@
           xhr.onload = function(){
               console.log(xhr.responseText);
           };
-        }
       }
       
     </script>
