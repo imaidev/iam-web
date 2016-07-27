@@ -38,8 +38,8 @@
               xhr = XDomainRequest();
           }
           xhr.open('GET', url, true);
-          xhr.onreadystatchanged = function(){
-            if (xhr.readyState == 4){
+          xhr.send();
+          xhr.onload = function(){
               var data = xhr.responseText, jsonData = eval(data);
               var userCtx = jsonData.userCtx;
               var payload = (new Base64()).encode(userCtx);
@@ -47,11 +47,6 @@
               //setCookie('imaicloud_md5','TX7ZNGJJNqtHviTmMr-DDQ');
               setCookie('secure_link_md5','yYCuToUyLV2czYK12_4gUA');
               setCookie('imaicloud_role','_admin,compdev,appdev');
-            }
-          };
-          xhr.send();
-          xhr.onload = function(){
-              console.log(xhr.responseText);
           };
       }
       
