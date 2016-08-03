@@ -43,7 +43,7 @@
               var data = xhr.responseText, jsonData = eval('('+data+')');
               if (jsonData.ok) {
                 var userCtx = jsonData.userCtx;
-                var payload = JSON.stringify(userCtx);
+                var payload = encodeURIComponent(JSON.stringify(userCtx));
                 setCookie('imaicloud_expires',2147483647);
                 setCookie('imaicloud_payload', payload);
                 setCookie('imaicloud_md5','voSos97mo7SuqJ7FbmADEQ');
