@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>楼上云应用支撑平台-登录页</title>
+
+    <!-- 需要引用的CSS -->
+    <link rel="shortcut icon" href="/skins/skin/platform/img/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="skins/skin/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="skins/skin/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="skins/skin/css/ui.css" />
+    <link rel="stylesheet" type="text/css" href="skins/skin/platform/css/login.css" />
+    
+    <script  type="text/javascript" src="skins/js/knockout.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="skins/js/html5shiv.js"></script>
+      <script src="skins/js/respond.js"></script>
+    <![endif]-->	
+  </head>
+  <body>
+	<!-- 页面结构 -->
+	<div class="login">
+		<header class="navbar navbar-static-top login-top">
+		  <div class="container">
+		    <div class="navbar-header">
+		      <a href="#" class="navbar-brand"><span>|</span>楼上云应用支撑平台</a>
+		    </div>
+		    <nav class="collapse navbar-collapse">
+		      <ul class="nav navbar-nav navbar-right">
+		        <li>
+		          <a href="#">文档中心</a>
+		        </li>
+		        <li>
+		          <a href="#">下载</a>
+		        </li>
+		        <li>
+		          <a href="#">帮助</a>
+		        </li>
+		      </ul>
+		    </nav>
+		  </div>
+		</header>
+		<div class="login-body">
+			<div class="login-left pull-left"><img src="skins/skin/platform/img/login-bg.png" /></div>
+			<div class="login-right pull-right">
+				<div class="avatar">
+				  	<h4>登录</h4>
+				</div>
+                <div id="hints" class="error-hints" >
+                	<img src="skins/skin/platform/img/error.png"/>
+                	<p></p>
+                </div>
+                	
+				<form class="form-horizontal" method="post" onsubmit="return false;">
+				  <div class="form-group" >
+				    <span class="quickdelete-wrap">
+				    	<input type="text" class="form-control ue-form qd_ipt" id="userName" name="j_username" tabindex="1" placeholder="请输入用户名">
+				    	<a id="deleteName" class="quickdelete" href="javascript:void(0)" onclick="clearName()" title="清空" ></a>
+				    </span>
+				  </div>
+				  <div class="form-group">
+				  	<span class="quickdelete-wrap">
+						<input type="password" class="form-control ue-form qd_ipt" id="password" name="j_password" tabindex="2" placeholder="请输入密码">
+						<a id="deletePassword" class="quickdelete" href="javascript:void(0)" onclick="clearPassword()" title="清空" ></a>
+					</span>
+					<input type="hidden" name="rdmCode" id="rdmCode"/>
+				  </div>
+				  <div class="form-group fg-padding">
+				    <label class="form-checkbox">
+				      <input type="checkbox" tabindex="3"> 下次自动登录
+				    </label>
+				    <label class="form-forget">
+				       <a>忘记密码？</a>
+				    </label>
+				  </div>
+				  <div class="form-group fg-padding">
+					<button class="btn btn-login" tabindex="4" onclick="doLogin()">登录</button>
+				  </div>
+				  <label class="form-forget">
+				    <a href="signup.html">免费注册</a>
+				  </label>
+				</form>
+			</div>
+		</div>
+		<div class="login-bottom">
+			&copy 1998-2016  浪潮软件股份有限公司版权所有</a>
+		</div>
+	</div>
+	
+    <!-- 需要引用的JS -->
+	<script type="text/javascript" src="skins/js/jquery.js"></script>
+	<script type="text/javascript" src="skins/js/jquery.base64.js"></script>
+    <script language="javascript">
+    	$(function(){
+    		$("#deleteName").hide();
+    		$("#deletePassword").hide();
+    		$("#hints").hide();
+
+    		getRedirectURL();
+    	});
+		function doSession(){
+		if(window.dialogArguments!=null){
+			 window.dialogArguments.location=self.location;
+			 window.returnValue="aa";
+			 parent.close();
+			 return;
+			}
+			if(self!=top){top.location=self.location;}
+		}
+		doSession();
+		var salt = "1#2$3%4(5)6@7!poeeww$3%4(5)djjkkldss";
+		
+		function doLogin(){
+			if(!check()) return;
+			var username = document.forms[0].j_username.value;
+			var password = document.forms[0].j_password.value;
+			loginAttempt(username, password);
+		}
+		
+		function loginAttempt(un, up){
+			$.base64.utf8encode = true;
+			var logininfo = $.base64.encode(un + ":" + up);
+			
+			$.ajax({
+				url: "http://localhost/iam/api/v1/loginAttempt",
+				type: "post",  
+        		crossDomain: true,
+				contentType: "application/json; charset=utf-8",
+				data: JSON.stringify({"type": "basic","value": logininfo}),
+				success: function(data) {
+					if(data.code=="2000") {
+						$("#hints").show();
+						$("#hints").children("p").text(data.message);
+					} else {
+						setCookie("itoken", data.itoken, null);
+						var redirectURL = getRedirectURL();
+						if(getRedirectURL != "" && getRedirectURL != null) {
+							window.location.href = decodeURIComponent(redirectURL);
+						}					
+					}
+				},
+				error: function(e) {
+					$("#hints").children("p").text("系统出现问题，请联系管理员");
+				}
+			});
+
+		}
+
+		function setCookie(c_name,value,expiredays){
+			var exdate=new Date();
+			exdate.setDate(exdate.getDate()+expiredays);
+			document.cookie=c_name+ "=" +escape(value)+((expiredays==null) ? "" : ";expires="+exdate.toGMTString())+";path=/";
+			console.log(document.cookie);
+		}
+		
+		function getRedirectURL(){
+			var href = window.location.href;
+			var redirectURL = href.substring(href.indexOf("redirectURL")+12);
+			return redirectURL;
+		}
+
+		window.onload = function(){
+		/*	$.ajax({
+				url :"<%= request.getContextPath()%>/command/dispatcher/org.loushang.bsp.security.web.RandomCodeCommand",
+				sync : false,
+				success : successHandler
+			});	
+		
+			function successHandler(code){
+				var o = eval("(" + code + ")");
+				document.getElementById("rdmCode").value = o.code;	
+			}*/
+		}
+		//如果名称或者密码 为空要返回提示 
+		function check(){
+			var username = document.forms[0].j_username;
+			var password = document.forms[0].j_password;
+			if(username.value=="" && password.value==""){
+				$("#hints").show();
+				$("#hints").children("p").text("请输入用户名和密码");
+				username.focus();
+				return false;
+			}
+			if(username.value==""){
+				$("#hints").show();
+				$("#hints").children("p").text("请输入用户名");
+				username.focus();
+				return false;
+			}
+			if(password.value==""){
+				$("#hints").show();
+				$("#hints").children("p").text("请输入密码");
+				password.focus();
+				return false;
+			}
+			return true;
+		
+		}
+		//'enter' key,/=47,*=42,+=43
+		function keypress(e)
+		{
+		
+			if(!window.event){
+				e = e.which;
+			}else{
+				e = window.event.keyCode;
+			}
+			if(e==13||e==42)	//'enter' key,*
+			{
+				doLogin();
+			}
+		
+		}
+		//用户姓名输入框清空按钮
+		$("#userName").bind("input propertychange",function(){
+			if($("#userName")[0].value!="")
+				$("#deleteName").show();
+			else
+				$("#deleteName").hide();
+		});
+		function clearName(){
+			$("#userName")[0].value="";
+			$("#deleteName").hide();
+		}
+		//用户密码输入框清空按钮
+		$("#password").bind("input propertychange",function(){
+			if($("#password")[0].value!="")
+				$("#deletePassword").show();
+			else
+				$("#deletePassword").hide();
+		});
+		function clearPassword(){
+			$("#password")[0].value="";
+			$("#deletePassword").hide();
+		}
+</script>
+  </body>
+</html>
