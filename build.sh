@@ -19,3 +19,6 @@ fi
 
 echo '>>> Starting new container'
 docker run -d -p 10030:8080 iam-web
+
+echo '>>> Starting build iam image'
+/bin/sh build_server.sh
