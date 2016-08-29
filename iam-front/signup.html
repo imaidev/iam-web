@@ -141,7 +141,7 @@
 		
 		function loginAttempt(un, up){
 			$.ajax({
-				url: "http://localhost/iam/api/v1/accounts",
+				url: "//dev.imaicloud.com/iam/api/v1/accounts",
 				type: "post",
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify({"email": un,"password": up}),
