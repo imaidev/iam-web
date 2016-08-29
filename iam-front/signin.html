@@ -128,9 +128,9 @@
 			var logininfo = $.base64.encode(un + ":" + up);
 			
 			$.ajax({
-				url: "//dev.imaicloud.com/iam/api/v1/loginAttempt",
+				url: "http://dev.imaicloud.com/iam/api/v1/loginAttempt",
 				type: "post",  
-        		crossDomain: true,
+        			crossDomain: true,
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify({"type": "basic","value": logininfo}),
 				success: function(data) {
