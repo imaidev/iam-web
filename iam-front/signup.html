@@ -143,6 +143,7 @@
 			$.ajax({
 				url: "https://dev.imaicloud.com/iam/api/v1/accounts",
 				type: "post",
+				crossDomain: true,
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify({"email": un,"password": up}),
 				success: function(data) {
