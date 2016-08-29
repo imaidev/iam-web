@@ -8,6 +8,13 @@ cd iam
 
 wget https://dev.imaicloud.com/files/comic/IAM-war/iam.war
 
+sudo jar -xvf iam.war
+
+echo 'dataSource.driverClassName=org.gjt.mm.mysql.Driver' > WEB-INF/classes/datasource.properties
+echo 'dataSource.url=jdbc:mysql://10.0.7.107:3306/iam?useUnicode=true&characterEncoding=utf-8&useOldAliasMetadataBehavior=true&allowMultiQueries=true' >> WEB-INF/classes/datasource.properties
+echo 'dataSource.username=root' >> WEB-INF/classes/datasource.properties
+echo 'dataSource.password=root' >> WEB-INF/classes/datasource.properties
+
 sudo docker build -t iam .
 
 echo '>>> Get old container id'
