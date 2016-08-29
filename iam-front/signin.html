@@ -139,7 +139,8 @@
 						$("#hints").children("p").text(data.message);
 					} else {
 						setCookie("itoken", data.itoken, null);
-						var redirectURL = getRedirectURL();
+						//var redirectURL = getRedirectURL();
+						var redirectURL = document.referrer;
 						if(getRedirectURL != "" && getRedirectURL != null) {
 							window.location.href = decodeURIComponent(redirectURL);
 						}					
