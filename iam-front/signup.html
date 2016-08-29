@@ -147,6 +147,10 @@
 				data: JSON.stringify({"email": un,"password": up}),
 				success: function(data) {
 					alert("注册成功！");
+					var redirectURL = document.referrer;
+					if(getRedirectURL != "" && getRedirectURL != null) {
+						window.location.href = decodeURIComponent(redirectURL);
+					}
 				},
 				error: function(e) {
 					alert(e);
