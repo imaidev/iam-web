@@ -144,10 +144,10 @@
 						if(tokenInfo.length == 3) {
 							var payload = $.base64.decode(tokenInfo[1]);
 							var userInfo = JSON.parse(payload);
-							setCookie("imaicloud_expires", userInfo.exp);
-							setCookie("imaicloud_payload", tokenInfo[1]);
-							setCookie("imaicloud_md5", tokenInfo[2]);
-							setCookie("imaicloud_role", userInfo.group);
+							setCookie("imaicloud_expires", userInfo.exp, userInfo.exp);
+							setCookie("imaicloud_payload", tokenInfo[1], userInfo.exp);
+							setCookie("imaicloud_md5", tokenInfo[2], userInfo.exp);
+							setCookie("imaicloud_role", userInfo.group, userInfo.exp);
 							//var redirectURL = getRedirectURL();
 							var redirectURL = document.referrer;
 							if(getRedirectURL != "" && getRedirectURL != null) {
