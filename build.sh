@@ -2,7 +2,7 @@
 
 mkdir iam
 
-copy Dockerfile_server iam/Dockerfile
+cp Dockerfile_server iam/Dockerfile
 
 cd iam
 
