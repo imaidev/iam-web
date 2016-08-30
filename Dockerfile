@@ -2,7 +2,7 @@ FROM tomcat7-jre8:latest
 
 RUN mkdir iam
 
-RUN cp Dockerfile_server iam/Dockerfile
+RUN cp Dockerfile iam/Dockerfile
 
 WORKDIR iam
 
