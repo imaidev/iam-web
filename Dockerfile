@@ -2,9 +2,7 @@ FROM tomcat7-jre8:latest
 
 RUN yum install wget unzip -y
 RUN wget https://dev.imaicloud.com/files/comic/IAM-war/iam.war
-RUN unzip iam.war
-
-ADD WEB-INF /tomcat/webapps/iam/
+RUN unzip iam.war -d /tomcat/webapps/iam/
 
 # test start
 RUN echo 'dataSource.driverClassName=org.gjt.mm.mysql.Driver' > /tomcat/webapps/iam/WEB-INF/classes/datasource.properties
