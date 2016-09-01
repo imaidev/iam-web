@@ -63,7 +63,7 @@ init();
 */
 function init() {
 	
-	//importresource();
+	importresource();
 	
 	var itoken = getCookie("itoken");
 	
@@ -110,10 +110,10 @@ function importresource() {
 	var theDate = +new Date();
 
 	// js css import
+		//I.DOMAIN + '/skins/skin/css/bootstrap.css',
+		//I.DOMAIN + '/skins/skin/css/font-awesome.css',
+		//I.DOMAIN + '/skins/skin/css/ui.css',
 	var cssArray = new Array(
-		I.DOMAIN + '/skins/skin/css/bootstrap.css',
-		I.DOMAIN + '/skins/skin/css/font-awesome.css',
-		I.DOMAIN + '/skins/skin/css/ui.css',
 		I.DOMAIN + '/skins/skin/platform/css/home.css'
 	);
 	for(var i=0; i<cssArray.length; i++){
@@ -124,10 +124,10 @@ function importresource() {
 		cssTarget.setAttribute('data-timestamp', theDate);
 		(document.head).appendChild(cssTarget);
 	}
+	//	I.DOMAIN + '/skins/js/bootstrap.js',
 	var jsArray = new Array(
 		I.DOMAIN + '/skins/js/jquery.js',
 		I.DOMAIN + '/skins/js/jquery.base64.js',
-		I.DOMAIN + '/skins/js/bootstrap.js',
 		I.DOMAIN + '/skins/js/json.js',
 		I.DOMAIN + '/skins/js/iamui.js'
 	);
