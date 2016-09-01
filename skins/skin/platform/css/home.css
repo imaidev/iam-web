@@ -1,31 +1,5 @@
-body {
-	font: 14px arial,microsoft yahei,simsun,simhei,sans-serif;
-}
-.navbar {
-	margin-bottom: 0;
-	border-bottom: 1px solid #ddd;
-	background-color: #00bbee;
-	min-height: 44px;
-}
 .navbar-header {
 	margin-left: 20px;
-}
-.navbar-brand {
-	padding-left: 145px;
-	background-image: url(../img/login-logo.png);
-	background-repeat: no-repeat;
-	color: #fff;
-	background-position: 0 13px;
-	height: 44px;
-	line-height: 16px;
-}
-.navbar-brand span {
-	font-size: 18px;
-	color: #ddd;
-	margin: auto 10px auto 0px;
-}
-.navbar-brand:hover {
-	color: #fff;
 }
 .navbar-right a {
 	line-height: 24px;
@@ -47,13 +21,6 @@ body {
 }
 .navbar-nav>li>a {
 	display: inline-block;
-}
-.nav>li>a:focus, .nav>li>a:hover, 
-.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
-	background-color: transparent;
-}
-.navbar-nav>.active>a, .navbar-nav>.active>a:hover {
-	border-bottom: 1px solid #333;
 }
 .navbar-nav .dropdown {
 	padding: 10px;
