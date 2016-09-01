@@ -63,7 +63,7 @@ init();
 */
 function init() {
 	
-	importresource();
+	//importresource();
 	
 	var itoken = getCookie("itoken");
 	
