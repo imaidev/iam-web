@@ -104,7 +104,9 @@
     <!-- 需要引用的JS -->
 	<script type="text/javascript" src="skins/js/jquery.js"></script>
 	<script type="text/javascript" src="skins/js/jquery.base64.js"></script>
-    <script language="javascript">
+ 	<script type="text/javascript" src="skins/js/htpasswd/md5.js"></script>
+	<script type="text/javascript" src="skins/js/htpasswd/encrypt.js"></script>
+   <script language="javascript">
     	$(function(){
     		$("#deleteName").hide();
     		$("#deletePassword").hide();
@@ -140,11 +142,13 @@
 		}
 		
 		function loginAttempt(un, up){
+			var nameAndPass = htpasswd(un, up, 2);
+			var htpassword = nameAndPass.split(":")[1];
 			$.ajax({
 				url: "//dev.imaicloud.com/iam/api/v1/accounts",
 				type: "post",
 				contentType: "application/json; charset=utf-8",
-				data: JSON.stringify({"email": un,"password": up}),
+				data: JSON.stringify({"email": un,"password": htpassword}),
 				success: function(data) {
 					alert("注册成功！");
 				},
