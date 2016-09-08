@@ -96,8 +96,6 @@
     <!-- 需要引用的JS -->
 	<script type="text/javascript" src="skins/js/jquery.js"></script>
 	<script type="text/javascript" src="skins/js/jquery.base64.js"></script>
- 	<script type="text/javascript" src="skins/js/htpasswd/md5.js"></script>
-	<script type="text/javascript" src="skins/js/htpasswd/encrypt.js"></script>
     <script language="javascript">
     	$(function(){
     		$("#deleteName").hide();
@@ -127,9 +125,7 @@
 		
 		function loginAttempt(un, up){
 			$.base64.utf8encode = true;
-			var nameAndPass = htpasswd(un, up, 2);
-			var htpassword = nameAndPass.split(":")[1];
-			var logininfo = $.base64.encode(un + ":" + htpassword);
+			var logininfo = $.base64.encode(un + ":" + up);
 			
 			$.ajax({
 				url: "//dev.imaicloud.com/iam/api/v1/loginAttempt",
