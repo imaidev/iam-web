@@ -125,7 +125,9 @@
 		
 		function loginAttempt(un, up){
 			$.base64.utf8encode = true;
-			var logininfo = $.base64.encode(un + ":" + up);
+			var nameAndPass = htpasswd(un, up, 2);
+			var htpassword = nameAndPass.split(":")[1];
+			var logininfo = $.base64.encode(un + ":" + htpassword);
 			
 			$.ajax({
 				url: "//dev.imaicloud.com/iam/api/v1/loginAttempt",
