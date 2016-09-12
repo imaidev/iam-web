@@ -43,11 +43,13 @@ Account创建过程会同时创建customData，其中的定制数据为空
 ####4.1 访问Account的customData
 
 GET /api/v1/accounts/$ACCOUNT_ID/customData
+
 curl https://dev.maicloud.com/iam/api/v1/accounts/$ACCOUNT_ID/customData
 
 ####4.2 定制cusotmData数据
 
 (POST https://dev.imaicloud.com/iam/api/v1/accounts/$ACCOUNT_ID/customData)
+
 POST /api/v1/accounts/$ACCOUNT_ID/customData
 
 ```
