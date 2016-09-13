@@ -57,5 +57,6 @@ POST /api/v1/accounts/$ACCOUNT_ID/customData
 	"permission":"A"
 }
 ```
-
-curl -XPOST https://dev.imaicloud.com/iam/api/v1/accounts/$ACCOUNT_ID/customData -d '{ "permission":"A" }'
+```
+curl -H 'Content-Type: application/json' -XPOST https://dev.imaicloud.com/iam/api/v1/accounts/$ACCOUNT_ID/customData -d '{ "permission":"A" }'
+```
