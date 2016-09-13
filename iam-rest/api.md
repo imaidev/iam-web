@@ -12,6 +12,11 @@ POST /api/v1/accounts
     "username":"Lion"
 }
 ```
+```
+curl -H 'Content-Type: application/json' -XPOST https://dev.imaicloud.com/iam/api/v1/accounts \
+-d '{ "email":"wbwang@inspur.com",   "password":"123",  "status":"enabled",  "username":"wbwang" }'
+```
+
 
 ###2. 创建用户组Group
 
@@ -58,5 +63,6 @@ POST /api/v1/accounts/$ACCOUNT_ID/customData
 }
 ```
 ```
+export ACCOUNT_ID=YykNiKy9Tpqa93Q0hh0gWg
 curl -H 'Content-Type: application/json' -XPOST https://dev.imaicloud.com/iam/api/v1/accounts/$ACCOUNT_ID/customData -d '{ "permission":"A" }'
 ```
