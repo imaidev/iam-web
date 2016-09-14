@@ -1,8 +1,7 @@
 # API 说明
 
 ###1. 创建Account
-
-POST /api/v1/accounts
+- POST /api/v1/accounts
 
 ```
 {
