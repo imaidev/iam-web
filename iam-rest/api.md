@@ -11,7 +11,9 @@ POST /api/v1/account/$ACCOUNT_ID/apiKeys
 $ACCOUNT_ID为账号内码，可以在登录后从头像菜单中查看。
 
 ```
-curl -H "Content-Type: application/json" -X POST https://dev.imaicloud.com/iam/api/v1/accounts/sqHezdzpS_e_bPbmjV6zYw/apiKeys -d "{}"
+curl -H "Content-Type: application/json" \
+-X POST https://dev.imaicloud.com/iam/api/v1/accounts/sqHezdzpS_e_bPbmjV6zYw/apiKeys \
+-d "{}"
 ```
 
 ###3. Retrieve A Tenant
@@ -19,7 +21,8 @@ curl -H "Content-Type: application/json" -X POST https://dev.imaicloud.com/iam/a
 GET /api/v1/tenants/current
 
 ```
-curl -H "Authorization: Basic MkpBUkFQMTZYWU5KU0tUSFpaU1RNVTlWRTpISEc5R0Y2ZFRnRDlnWE40bkFSaTJKd0hnOS92Qk13YjRZVnJ1WGppN05j" https://dev.imaicloud.com/iam/api/v1/tenants/current
+curl -H "Authorization: Basic MkpBUkFQMTZYWU5KU0tUSFpaU1RNVTlWRTpISEc5R0Y2ZFRnRDlnWE40bk" \
+https://dev.imaicloud.com/iam/api/v1/tenants/current
 ```
 
 ###4. 查询租户下的目录
@@ -43,7 +46,14 @@ curl https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/acc
 POST api/v1/directories/$DIRECTORY_ID/accounts
 
 ```
-curl -H 'Content-Type: application/json' -X POST https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/accounts -d '{"email": "demo@qq.com", "password": "$apr1$1Nc6ANA.$UjRKo27AQzrsWf7aEi5811", "status": "enabled", "username": "demo"}'
+curl -H 'Content-Type: application/json' \
+-X POST https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/accounts \
+-d '{ \
+"email": "demo@qq.com", \
+"password": "$apr1$1Nc6ANA.$UjRKo27AQzrsWf7aEi5811", \
+"status": "enabled", \
+"username": "demo" \
+}'
 ```
 
 
@@ -58,7 +68,9 @@ https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/groups
 ###9. 在目录下创建组
 
 ```
-curl -H 'Content-Type: application/json' -X POST https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/groups -d '{"name": "demo group"}'
+curl -H 'Content-Type: application/json' \
+-X POST https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/groups \
+-d '{"name": "demo group"}'
 ```
 
 ###10. 定制数据
@@ -79,7 +91,9 @@ curl https://dev.imaicloud.com/iam/api/v1/accounts/KySQo1c7TTKoFzniA3VLbA/custom
 POST /api/v1/accounts/$ACCOUNT_ID/customData
 
 ```
-curl -H 'Content-Type: application/json' -X POST https://dev.imaicloud.com/iam/api/v1/accounts/06xbdFbrSYug82YrA7hroQ/customData -d '{"domain": "demo.imaicloud.com"}'
+curl -H 'Content-Type: application/json' \
+-X POST https://dev.imaicloud.com/iam/api/v1/accounts/06xbdFbrSYug82YrA7hroQ/customData \
+-d '{"domain": "demo.imaicloud.com"}'
 ```
 
 
