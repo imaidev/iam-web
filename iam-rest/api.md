@@ -43,7 +43,10 @@ GET /api/v1/tenants/$TENANT_ID/directories
 POST /api/v1/directories
 
 ```
-curl -H "Content-Type: application/json" -H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" -X POST https://dev.imaicloud.com/iam/api/v1/directories -d "{\"description\": \"客户目录\", \"type\": \"cloud\", \"status\": \"enabled\", \"name\": \"customer\"}"
+curl -H "Content-Type: application/json" \
+-H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" \
+-X POST https://dev.imaicloud.com/iam/api/v1/directories \
+-d "{\"description\": \"customer directory\", \"type\": \"cloud\", \"status\": \"enabled\", \"name\": \"customer\"}"
 ```
 
 ###6. 查询目录下的账号
