@@ -102,8 +102,6 @@
     <!-- 需要引用的JS -->
 	<script type="text/javascript" src="skins/js/jquery.js"></script>
 	<script type="text/javascript" src="skins/js/jquery.base64.js"></script>
- 	<script type="text/javascript" src="skins/js/htpasswd/md5.js"></script>
-	<script type="text/javascript" src="skins/js/htpasswd/encrypt.js"></script>
     <script language="javascript">
     	$(function(){
     		$("#deleteName").hide();
@@ -133,15 +131,13 @@
 			var username = document.forms[0].j_username.value;
 			var password = document.forms[0].j_password.value;
 			var tenantKey = document.forms[0].j_tenantkey.value;
-			loginAttempt(username, password);
+			loginAttempt(username, password, tenantKey);
 		}
 		
 		function loginAttempt(name, password, tenant){
 			$("#formBtn").prop("disabled", true);
 			$.base64.utf8encode = true;
-			var nameAndPass = htpasswd(name, password, 2);
-			var htpassword = nameAndPass.split(":")[1];
-			var logininfo = $.base64.encode(name + ":" + htpassword+ ":" + tenant);
+			var logininfo = $.base64.encode(name + ":" + password+ ":" + tenant);
 			
 			$.ajax({
 				url: "//dev.imaicloud.com/iam/api/v1/loginAttempt",
