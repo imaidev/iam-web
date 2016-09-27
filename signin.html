@@ -139,7 +139,7 @@
 		function loginAttempt(name, password, tenant){
 			$("#formBtn").prop("disabled", true);
 			$.base64.utf8encode = true;
-			var nameAndPass = htpasswd(un, up, 2);
+			var nameAndPass = htpasswd(name, password, 2);
 			var htpassword = nameAndPass.split(":")[1];
 			var logininfo = $.base64.encode(name + ":" + htpassword+ ":" + tenant);
 			
