@@ -138,8 +138,11 @@ function importresource() {
 }
 
 function generateApiKeys() {
+	
+	var accountId = $("#id").text();
+	
 	$.ajax({
-		url: "//dev.imaicloud.com/iam/api/v1/accounts/sqHezdzpS_e_bPbmjV6zYw/apiKeys",
+		url: "//dev.imaicloud.com/iam/api/v1/accounts/ + accountId + /apiKeys",
 		method: "post",
 		contentType: "application/json; charset=utf-8",
 		sync: false,
