@@ -142,7 +142,7 @@ function generateApiKeys() {
 	var accountId = $("#id").text();
 	
 	$.ajax({
-		url: "//dev.imaicloud.com/iam/api/v1/accounts/ + accountId + /apiKeys",
+		url: "//dev.imaicloud.com/iam/api/v1/accounts/" + accountId + "/apiKeys",
 		method: "post",
 		contentType: "application/json; charset=utf-8",
 		sync: false,
