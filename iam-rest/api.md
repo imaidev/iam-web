@@ -25,6 +25,8 @@ curl -H "Content-Type: application/json" \
 -d "{}"
 ```
 
+REST API的认证使用Authorization请求头，值为apiKey的id和secret的base64编码（ base64($ID:$SECRET) ）。
+
 ###3. Retrieve A Tenant
 
 GET /api/v1/tenants/current
