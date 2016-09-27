@@ -75,11 +75,13 @@ function init() {
 	} else {
 		viewSucceedArray.push('<a data-toggle="dropdown" data-bind="text:userName" class="username"><span id="username">SUPERADMIN</span><span class="caret"></span></a>');
 		viewSucceedArray.push('<div class="dropdown-menu ue-dropdown-menu dropdown-menu-right">');
+		/*
 		viewSucceedArray.push('<span class="ue-dropdown-angle"></span>');
-		viewSucceedArray.push('<img class="user-photo" src="/demo/skins/skin/platform/img/user.jpg"/>');
+		viewSucceedArray.push('<img class="user-photo" src="/demo/skins/skin/platform/img/user.jpg"/>');*/
 		viewSucceedArray.push('<div class="user-info">');
-		viewSucceedArray.push('<a href="#" class="user-action"><i class="fa fa-edit md">&nbsp;</i>修改资料</a>');
-		viewSucceedArray.push('<a href="#" class="user-action"><i class="fa fa-user-md md">&nbsp;</i>个人中心</a>');
+		viewSucceedArray.push('<b>id：</b><span id="id"></span><br>');
+		viewSucceedArray.push('<b>email：</b><span id="uid"></span><br>');
+		viewSucceedArray.push('<b>apiKeys：</b><a onclick="generateApiKeys()">生成apiKeys</a>');
 		viewSucceedArray.push('</div>');
 		viewSucceedArray.push('<div class="exit"><a onclick="logout()">退出</a></div>');
 		viewSucceedArray.push('</div>');
@@ -119,6 +121,8 @@ function importresource() {
 		I.DOMAIN + '/skins/js/jquery.base64.js',
 		I.DOMAIN + '/skins/js/bootstrap.js',
 		I.DOMAIN + '/skins/js/json.js',
+		I.DOMAIN + '/skins/js/blob/Blob.js',
+		I.DOMAIN + '/skins/js/filesaver/FileSaver.js',
 		I.DOMAIN + '/skins/js/iamui.js'
 	);
 	/*for(var i=0; i<jsArray.length; i++){
@@ -131,6 +135,28 @@ function importresource() {
 	//loading ...
 	Loader.load(jsArray);
 
+}
+
+function generateApiKeys() {
+	$.ajax({
+		url: "//dev.imaicloud.com/iam/api/v1/accounts/sqHezdzpS_e_bPbmjV6zYw/apiKeys",
+		method: "post",
+		contentType: "application/json; charset=utf-8",
+		sync: false,
+		success: function(apiKeys) {
+			//var apiKeys = $.parseJSON(data);
+			downloadFile("apiKey", apiKeys);
+		},
+		error: function(data){
+			alert(data);
+		}
+	});
+}
+
+function downloadFile(fileName, content){
+	var apiKeys = new Array(content.id + ":" + content.secret);
+    var blob = new Blob(apiKeys, {type: "text/plain;charset=utf-8"});
+	saveAs(blob, fileName + "-" + content.id + ".properties");
 }
 
 function login() {

@@ -60,6 +60,12 @@
 				<form class="form-horizontal" method="post" onsubmit="return false;">
 				  <div class="form-group" >
 				    <span class="quickdelete-wrap">
+				    	<input type="text" class="form-control ue-form qd_ipt" id="tenantKey" name="j_tenantkey" tabindex="1" placeholder="请输入租户名">
+				    	<a id="deleteTenant" class="quickdelete" href="javascript:void(0)" onclick="clearTenant()" title="清空" ></a>
+				    </span>
+				  </div>
+				  <div class="form-group" >
+				    <span class="quickdelete-wrap">
 				    	<input type="text" class="form-control ue-form qd_ipt" id="userName" name="j_username" tabindex="1" placeholder="请输入用户名">
 				    	<a id="deleteName" class="quickdelete" href="javascript:void(0)" onclick="clearName()" title="清空" ></a>
 				    </span>
@@ -80,7 +86,7 @@
 				    </label>
 				  </div>
 				  <div class="form-group fg-padding">
-					<button class="btn btn-login" tabindex="4" onclick="doLogin()">登录</button>
+					<button class="btn btn-login" id="formBtn" tabindex="4" onclick="doLogin()">登录</button>
 				  </div>
 				  <label class="form-forget">
 				    <a href="signup.html">免费注册</a>
@@ -103,6 +109,10 @@
     		$("#hints").hide();
 
     		getRedirectURL();
+			var tenant = getCookie("tenant");
+			if(tenant != null) {
+				$("#tenantKey").val(tenant);
+			}
     	});
 		function doSession(){
 		if(window.dialogArguments!=null){
@@ -120,12 +130,14 @@
 			if(!check()) return;
 			var username = document.forms[0].j_username.value;
 			var password = document.forms[0].j_password.value;
+			var tenantKey = document.forms[0].j_tenantkey.value;
 			loginAttempt(username, password);
 		}
 		
-		function loginAttempt(un, up){
+		function loginAttempt(name, password, tenant){
+			$("#formBtn").prop("disabled", true);
 			$.base64.utf8encode = true;
-			var logininfo = $.base64.encode(un + ":" + up);
+			var logininfo = $.base64.encode(name + ":" + password+ ":" + tenant);
 			
 			$.ajax({
 				url: "//dev.imaicloud.com/iam/api/v1/loginAttempt",
@@ -144,9 +156,11 @@
 							window.location.href = decodeURIComponent(redirectURL);
 						}					
 					}
+					$("#formBtn").prop("disabled", false);
 				},
 				error: function(e) {
 					$("#hints").children("p").text("系统出现问题，请联系管理员");
+					$("#formBtn").prop("disabled", false);
 				}
 			});
 
@@ -159,6 +173,20 @@
 			console.log(document.cookie);
 		}
 		
+		function getCookie(c_name){
+			if (document.cookie.length>0){
+				c_start=document.cookie.indexOf(c_name + "=");
+				if (c_start!=-1){
+					c_start=c_start + c_name.length+1;
+					c_end=document.cookie.indexOf(";",c_start);
+					if (c_end==-1){
+						c_end=document.cookie.length;
+					}
+					return unescape(document.cookie.substring(c_start,c_end))
+				} 
+			}
+			return "";
+		}
 		function getRedirectURL(){
 			var href = window.location.href;
 			var redirectURL = href.substring(href.indexOf("redirectURL")+12);
@@ -181,6 +209,13 @@
 		function check(){
 			var username = document.forms[0].j_username;
 			var password = document.forms[0].j_password;
+			var tenant = document.forms[0].j_tenantkey;
+			if(tenant.value==""){
+				$("#hints").show();
+				$("#hints").children("p").text("请输入租户名");
+				tenant.focus();
+				return false;
+			}
 			if(username.value=="" && password.value==""){
 				$("#hints").show();
 				$("#hints").children("p").text("请输入用户名和密码");
@@ -216,6 +251,17 @@
 				doLogin();
 			}
 		
+		}
+		//租户名输入框清空按钮
+		$("#tenantKey").bind("input propertychange",function(){
+			if($("#tenantKey")[0].value!="")
+				$("#deleteTenant").show();
+			else
+				$("#deleteTenant").hide();
+		});
+		function clearTenant(){
+			$("#deleteTenant")[0].value="";
+			$(deleteTenant).hide();
 		}
 		//用户姓名输入框清空按钮
 		$("#userName").bind("input propertychange",function(){

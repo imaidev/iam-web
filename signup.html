@@ -12,6 +12,7 @@
     <link rel="shortcut icon" href="/skins/skin/platform/img/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="skins/skin/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="skins/skin/css/ui.css" />
+    <link rel="stylesheet" type="text/css" href="skins/skin/css/form.css" />
     <link rel="stylesheet" type="text/css" href="skins/skin/platform/css/signup.css" />
     
     <script  type="text/javascript" src="skins/js/knockout.js"></script>
@@ -103,6 +104,7 @@
 	
     <!-- 需要引用的JS -->
 	<script type="text/javascript" src="skins/js/jquery.js"></script>
+	<script type="text/javascript" src="skins/js/form.js"></script>
 	<script type="text/javascript" src="skins/js/jquery.base64.js"></script>
  	<script type="text/javascript" src="skins/js/htpasswd/md5.js"></script>
 	<script type="text/javascript" src="skins/js/htpasswd/encrypt.js"></script>
@@ -142,18 +144,33 @@
 		}
 		
 		function loginAttempt(un, up){
+		
+			$("#signupBtn").prop("disabled", true);
+		
 			var nameAndPass = htpasswd(un, up, 2);
 			var htpassword = nameAndPass.split(":")[1];
 			$.ajax({
-				url: "//dev.imaicloud.com/iam/api/v1/accounts",
+				url: "//dev.imaicloud.com/iam/api/register",
 				type: "post",
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify({"email": un,"password": htpassword}),
 				success: function(data) {
-					alert("注册成功！");
+
+					setCookie("tenant", data.key);
+					
+					$.dialog({
+						type: 'alert',
+						content: '注册成功！tenant为'+data.key+'，请保存tenant key。',
+						autofocus: true,
+						
+					});
+					
+					$("#signupBtn").prop("disabled", false);
 				},
 				error: function(e) {
-					alert(e);
+					alert("出现了异常，请联系管理员");
+					
+					$("#signupBtn").prop("disabled", false);
 				}
 			});
 
@@ -163,7 +180,7 @@
 			var exdate=new Date();
 			exdate.setDate(exdate.getDate()+expiredays);
 			document.cookie=c_name+ "=" +escape(value)+((expiredays==null) ? "" : ";expires="+exdate.toGMTString())+";path=/";
-			console.log(document.cookie);
+			
 		}
 		
 		function getRedirectURL(){
