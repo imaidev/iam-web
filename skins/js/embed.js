@@ -103,7 +103,7 @@ function importresource() {
 
 	// js css import
 	var cssArray = new Array(
-		I.DOMAIN + '/skins/skin/css/bootstrap.css',
+		//I.DOMAIN + '/skins/skin/css/bootstrap.css',
 		I.DOMAIN + '/skins/skin/css/font-awesome.css',
 		I.DOMAIN + '/skins/skin/css/ui.css',
 		I.DOMAIN + '/skins/skin/platform/css/home.css'
@@ -117,9 +117,9 @@ function importresource() {
 		(document.head).appendChild(cssTarget);
 	}
 	var jsArray = new Array(
-		I.DOMAIN + '/skins/js/jquery.js',
+		//I.DOMAIN + '/skins/js/jquery.js',
 		I.DOMAIN + '/skins/js/jquery.base64.js',
-		I.DOMAIN + '/skins/js/bootstrap.js',
+		//I.DOMAIN + '/skins/js/bootstrap.js',
 		I.DOMAIN + '/skins/js/json.js',
 		I.DOMAIN + '/skins/js/blob/Blob.js',
 		I.DOMAIN + '/skins/js/filesaver/FileSaver.js',
