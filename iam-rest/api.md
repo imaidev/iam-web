@@ -19,20 +19,27 @@ POST /api/v1/account/$ACCOUNT_ID/apiKeys
 $ACCOUNT_ID为账号内码，可以在登录后从头像菜单中查看。
 
 ```
-curl -H "Content-Type: application/json" \
--H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" \
+curl -H 'Content-Type: application/json' \
+-u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
 -X POST https://dev.imaicloud.com/iam/api/v1/accounts/sqHezdzpS_e_bPbmjV6zYw/apiKeys \
 -d "{}"
 ```
 
+``
+ 说明* 
+``
+
 REST API的认证使用Authorization请求头，值为apiKey的id和secret的base64编码（ base64($ID:$SECRET) ）。
+
+使用linux curl测试，可设置变量$IAM_APIKEY_ID、$IAM_APIKEY_SECRET，值分别apiKeys的id和secret。
+
 
 ###3. Retrieve A Tenant
 
 GET /api/v1/tenants/current
 
 ```
-curl -H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" \
+curl -u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
 https://dev.imaicloud.com/iam/api/v1/tenants/current
 ```
 
@@ -45,10 +52,10 @@ GET /api/v1/tenants/$TENANT_ID/directories
 POST /api/v1/directories
 
 ```
-curl -H "Content-Type: application/json" \
--H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" \
+curl -H 'Content-Type: application/json' \
+-u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
 -X POST https://dev.imaicloud.com/iam/api/v1/directories \
--d "{\"description\": \"customer directory\", \"type\": \"cloud\", \"status\": \"enabled\", \"name\": \"customer\"}"
+-d '{"description": "customer directory", "type": "cloud", "status": "enabled", "name": "customer"}'
 ```
 
 ###6. 查询目录下的账号
@@ -56,7 +63,7 @@ curl -H "Content-Type: application/json" \
 GET /api/v1/directories/$DIRECTORY_ID/accounts
 
 ```
-curl -H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" \
+curl -u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
 https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/accounts
 ```
 
@@ -66,7 +73,7 @@ POST api/v1/directories/$DIRECTORY_ID/accounts
 
 ```
 curl -H 'Content-Type: application/json' \
--H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" \
+-u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
 -X POST https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/accounts \
 -d '{ \
 "email": "demo@qq.com", \
@@ -82,7 +89,7 @@ curl -H 'Content-Type: application/json' \
 GET /api/v1/directories/$DIRECTORY_ID/groups
 
 ```
-curl -H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" \
+curl -u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
 https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/groups
 ```
 
@@ -90,7 +97,7 @@ https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/groups
 
 ```
 curl -H 'Content-Type: application/json' \
--H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" \
+-u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
 -X POST https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/groups \
 -d '{"name": "demo group"}'
 ```
@@ -106,7 +113,7 @@ POST /v1/$RESOURCE_TYPE/$RESOURCE_ID/customData
 GET /api/v1/accounts/$ACCOUNT_ID/customData
 
 ```
-curl -H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" \
+curl -u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
 https://dev.imaicloud.com/iam/api/v1/accounts/KySQo1c7TTKoFzniA3VLbA/customData
 ```
 
@@ -116,7 +123,7 @@ POST /api/v1/accounts/$ACCOUNT_ID/customData
 
 ```
 curl -H 'Content-Type: application/json' \
--H "Authorization: Basic SkM4ano3NWNVU2syYXJYcEZsUWZHQTpjTVVsU25weDB4M2FFeUl6b29GWmhWMi8yRWQyTEdGMUpURUQ0YmRiUDhV" \
+-u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
 -X POST https://dev.imaicloud.com/iam/api/v1/accounts/06xbdFbrSYug82YrA7hroQ/customData \
 -d '{"domain": "demo.imaicloud.com"}'
 ```
