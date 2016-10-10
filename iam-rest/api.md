@@ -102,7 +102,31 @@ curl -H 'Content-Type: application/json' \
 -d '{"name": "demo group"}'
 ```
 
-###10. 定制数据
+###10. 组成员
+
+账号和组通过组成员连接。
+
+**创建组成员**
+
+POST /api/v1/groupMemberships
+
+```
+curl -H 'Content-Type: application/json' \
+-u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
+-X POST https://dev.imaicloud.com/iam/api/v1/groupMemberships \
+-d "{\"account\": \"HVVhTp-uTQSdrLKRN2-y8A\", \"group\":\"M39wjYP-ToOkpkrULL2LZg\"}"
+```
+
+**查询账号所在的组**
+
+GET /api/v1/accounts/$ACCOUNT_ID/groups
+
+```
+curl -u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
+https://dev.imaicloud.com/iam/api/v1/accounts/HVVhTp-uTQSdrLKRN2-y8A/groups
+```
+
+###11. 定制数据
 
 GET /v1/$RESOURCE_TYPE/$RESOURCE_ID/customData
 
