@@ -12,11 +12,11 @@ if [["$RESULT" != *Successfully*]];then
   exit -1
 fi
 
-#if [ "$CID" != "" ];then
-#  docker stop $CID
-#  docker rm $CID
-#fi
+if [ "$CID" != "" ];then
+  docker stop $CID
+  docker rm $CID
+fi
 
 #挂载jdbc.properties文件，动态配置数据源
-#docker run -d -p 10040:8080 iam -v /var/owncloud/data/kevin/files/iam/jdbc.properties:/usr/local/tomcat/webapps/iam/WEB-INF/classes/jdbc.properties -v /var/owncloud/data/kevin/files/iam/datasource.xml:/usr/local/tomcat/webapps/iam/WEB-INF/spring/datasource.xml
+docker run -d -p 10040:8080 iam -v /var/owncloud/data/kevin/files/iam/jdbc.properties:/usr/local/tomcat/webapps/iam/WEB-INF/classes/jdbc.properties -v /var/owncloud/data/kevin/files/iam/datasource.xml:/usr/local/tomcat/webapps/iam/WEB-INF/spring/datasource.xml
 
