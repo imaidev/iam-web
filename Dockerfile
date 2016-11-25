@@ -1,6 +1,6 @@
-FROM tomcat7-jre8:latest
+FROM tomcat:latest
 
-RUN yum install wget -y
-RUN wget https://dev.imaicloud.com/files/comic/IAM-war/iam.war
-ADD iam.war -d /tomcat/webapps//
+RUN yum install wget unzip -y
+RUN wget http://10.0.7.107:8082/remote.php/webdav/iam/iam.war?downloadStartSecret=eikkzlsf9jgd2i0wn4iiicnmi --http-user=kevin --http-password=kevin -O iam.war
+RUN unzip iam.war -d /usr/local/tomcat/webapps/iam/ 
 
