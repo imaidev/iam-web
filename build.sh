@@ -5,7 +5,7 @@ buildlog=/var/owncloud/data/kevin/files/iam/logs/build.log
 touch $buildlog
 echo "*******************start**************" >> $buildlog
 date >> $buildlog
-
+ 
 #2 获取已经在运行的iam的container ID
 CID=$(docker ps | grep "iam" | awk '{print $1}')
 echo "正在运行的iam容器ID$CID" >> $buildlog
