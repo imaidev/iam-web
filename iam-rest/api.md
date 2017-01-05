@@ -741,7 +741,7 @@ curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
 https://dev.imaicloud.com/iam/v1/acccountLinks/yrJKhHOpQ8OG99eN04Amfg
 ```
 
-# 9. 定制数据
+# 8. 定制数据
 
 CustomData资源表示IAM中资源的自定义数据。
 
