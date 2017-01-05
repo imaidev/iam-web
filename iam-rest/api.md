@@ -277,7 +277,7 @@ curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
 https://dev.imaicloud.com/iam/v1/applications/nnwpouLzSLCZQhd4rY86Wg/loginAttempts
 ```
 
-# 3. 组织 Oranization
+# 4. 组织 Oranization
 
 组织Organization是专门为多租户应用提供的资源。
 Organization是虚拟的账号库。
@@ -318,7 +318,55 @@ curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
 https://dev.imaicloud.com/iam/v1/organizations
 ```
 
-# 4. 目录 Direcctory
+**3. 查询单个组织**
+
+```
+GET /v1/organizations/$ORGAN_ID
+```
+
+curl查询单个组织
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+https://dev.imaicloud.com/iam/v1/organizations/LV9EBZS1RlWr70kZJnfvMw
+```
+
+**4. 更新组织**
+
+```
+POST /v1/organizations/$ORGAN_ID
+
+{
+ "status":...,
+ "description":...
+}
+```
+
+curl更新组织
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{"description":"organ001"}' \
+https://dev.imaicloud.com/iam/v1/organizations/LV9EBZS1RlWr70kZJnfvMw
+```
+
+**5. 删除组织**
+
+```
+DELETE /v1/organizations/$ORGAN_ID
+```
+
+curl删除组织
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-X DELETE \
+https://dev.imaicloud.com/iam/v1/organizations/LV9EBZS1RlWr70kZJnfvMw
+```
+
+# 5. 目录 Direcctory
 
 **1. 创建目录**
 
@@ -387,7 +435,21 @@ curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
 https://dev.imaicloud.com/iam/v1/directories/OjKmSBzWREmBapqKHtgZEg
 ```
 
-**5. 查询目录下相关资源**
+**5. 删除目录**
+
+```
+DELETE /v1/directories/$DIR_ID
+```
+
+curl删除目录
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-X DELETE \
+https://dev.imaicloud.com/iam/v1/directories/OjKmSBzWREmBapqKHtgZEg
+```
+
+**6. 查询目录下相关资源**
 
 ```
 GET /v1/directories/$DIR_ID/$RESOURCE_TYPE
@@ -402,119 +464,316 @@ curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
 https://dev.imaicloud.com/iam/v1/directories/OjKmSBzWREmBapqKHtgZEg/accounts
 ```
 
-**6. 删除目录**
+# 6. 分组 Group
+
+分组，是对目录中的账号增加分类，相当于给予账号不同的角色。
+Group必须在指定目录下创建。
+
+**1. 创建账号**
 
 ```
-DELETE /v1/directories/$DIR_ID
+POST /v1/directories/$DIR_ID/groups
+
+{
+ "name":$GROUP_NAME,
+ ...
+}
+```
++ 必选参数：name
++ 可选参数：description,status
+
+curl创建分组
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{"name":"group001"}' \
+https://dev.imaicloud.com/iam/v1/directories/EyQcwlW0Sgu5PPJ8Pji29A/groups
 ```
 
-curl删除目录
+**2. 查询全部分组**
+
+```
+GET /v1/groups
+```
+
+curl 查询全部分组
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+https://dev.imaicloud.com/iam/v1/groups
+```
+
+**3. 查询单个分组**
+
+```
+GET /v1/groups/$GROUP_ID
+```
+
+curl 查询单个分组
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+https://dev.imaicloud.com/iam/v1/groups/LR8v0aDjS7ufDRhWchNyAw
+```
+
+**4. 更新分组**
+
+```
+POST /v1/groups/$GROUP_ID
+
+{
+ "name":...,
+ ...
+}
+```
++ 可用于更新的Group字段：name,description,status
+
+curl 更新分组
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{"name":"group001-a"}' \
+https://dev.imaicloud.com/iam/v1/groups/LR8v0aDjS7ufDRhWchNyAw
+```
+
+**5. 查询分组的相关资源**
+
+```
+GET /v1/groups/$GROUP_ID/$RESOURCE_TYPE
+```
+
+分组可以查询的基本资源包括：accounts，applications
+
+curl 查询分组相关的aplication
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+https://dev.imaicloud.com/iam/v1/groups/LR8v0aDjS7ufDRhWchNyAw/applications
+```
+
+**6. 删除分组**
+
+```
+ DELETE /v1/groups/$GROUP_ID
+```
+
+curl 删除分组
 
 ```
 curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
 -X DELETE \
-https://dev.imaicloud.com/iam/v1/directories/OjKmSBzWREmBapqKHtgZEg
+https://dev.imaicloud.com/iam/v1/groups/LR8v0aDjS7ufDRhWchNyAw
 ```
 
+# 7. 账号 Account
 
+账号是IAM的核心资源，属于目录。
+通过与其他资源相互关联，形成灵活的账号体系。
 
-
-
-###6. 查询目录下的账号
-
-GET /api/v1/directories/$DIRECTORY_ID/accounts
-
-```
-curl -u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
-https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/accounts
-```
-
-###7. 在目录下创建账号
-
-POST api/v1/directories/$DIRECTORY_ID/accounts
+**1. 创建账号**
 
 ```
-curl -H 'Content-Type: application/json' \
--u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
--X POST https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/accounts \
--d '{ \
-"email": "demo@qq.com", \
-"password": "$apr1$1Nc6ANA.$UjRKo27AQzrsWf7aEi5811", \
-"status": "enabled", \
-"username": "demo" \
-}'
+POST /v1/directoires/$DIR_ID/accounts
+POST /v1/applications/$APP_ID/accounts
+POST /v1/organizations/$ORGAN_ID/accounts
+
+{
+ "email":...,
+ "password":...,
+ ...
+}
 ```
++ 账号可以在目录，应用，组织下创建。
++ 账号的本质是在目录下创建，在应用或组织下创建，是因为应用，组织都可以与目录关联
++ 必选字段：email,password
++ 可选字段：username,status,description
 
-
-###8. 查询目录下的组
-
-GET /api/v1/directories/$DIRECTORY_ID/groups
-
-```
-curl -u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
-https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/groups
-```
-
-###9. 在目录下创建组
+curl 在目录下创建账号
 
 ```
-curl -H 'Content-Type: application/json' \
--u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
--X POST https://dev.imaicloud.com/iam/api/v1/directories/AsSYqRLrTrWsrbJiSIzqmA/groups \
--d '{"name": "demo group"}'
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{"email":"account001@163.com","password":"accout001"}' \
+https://dev.imaicloud.com/iam/v1/directories/EyQcwlW0Sgu5PPJ8Pji29A/accounts
 ```
 
-###10. 组成员
-
-账号和组通过组成员连接。
-
-**创建组成员**
-
-POST /api/v1/groupMemberships
+**2. 查询全部账号**
 
 ```
-curl -H 'Content-Type: application/json' \
--u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
--X POST https://dev.imaicloud.com/iam/api/v1/groupMemberships \
--d "{\"account\": \"HVVhTp-uTQSdrLKRN2-y8A\", \"group\":\"M39wjYP-ToOkpkrULL2LZg\"}"
+GET /v1/accounts
 ```
 
-**查询账号所在的组**
-
-GET /api/v1/accounts/$ACCOUNT_ID/groups
+curl 查询全部账号
 
 ```
-curl -u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
-https://dev.imaicloud.com/iam/api/v1/accounts/HVVhTp-uTQSdrLKRN2-y8A/groups
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+https://dev.imaicloud.com/iam/v1/accounts
 ```
 
-###11. 定制数据
+**3. 查询单个账号**
 
+```
+GET /v1/accounts/$ACCOUNT_ID
+```
+
+curl 查询单个账号
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+https://dev.imaicloud.com/iam/v1/accounts/jbrOIebARy2w1Apt1Uw8DA
+```
+
+**4. 更新账号**
+
+```
+POST /v1/accounts/$ACCOUNT_ID
+
+{
+ "username":...,
+ ...
+}
+```
++ account可以更新的字段包括：email,username,password,status
+
+curl 更新status
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{"status":"unverified"}' \
+https://dev.imaicloud.com/iam/v1/accounts/jbrOIebARy2w1Apt1Uw8DA
+```
+
+**5. 查看关联资源**
+
+```
+GET /v1/accounts/$ACCOUNT_ID/$RESOURCE_TYPE
+```
+
+账号可以查看的资源主要是：group
+
+curl 查看groups
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+https://dev.imaicloud.com/iam/v1/accounts/jbrOIebARy2w1Apt1Uw8DA/groups
+```
+
+**6. 关联分组与账号**
+
+GroupMembership在IAM表示分组Group与账号Account的关联关系，可以解释为将账号添加入分组；或者将某角色赋予账号
+
+```
+POST /v1/groupMemberships
+
+{
+ "account":...,
+ "group":...
+}
+```
++ 必选字段：group,account
+
+curl 创建GroupMembership
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{"group":"SfGQSQtEQym9YWZq5txUcg","account":"2YO9-INGSx-rabcvmtKemA"}' \
+https://dev.imaicloud.com/iam/v1/groupMemberships
+```
+
+**7. 解除账号与分组的关联**
+
+```
+DELETE /v1/groupshipMemberships/$GM_ID
+```
+
+curl 解除账号与分组的关联：
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-X DELETE \
+https://dev.imaicloud.com/iam/v1/groupMemberships/8e24otZ2S0SPSaYvSgfwPA
+```
+
+**8. 关联账号**
+
+AccountLink资源用于关联位于不同目录的账号。
+
+```
+POST /v1/accountLinks
+
+{
+ "leftAccount":...,
+ "rightAccount":...
+}
+```
++ 必选字段：leftAccount,rightAccount
+
+curl 关联账号
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{"leftAccount":"0jxyzoXNS4SjMCDBuPQPrQ","rightAccount":"2YO9-INGSx-rabcvmtKemA"}' \
+https://dev.imaicloud.com/iam/v1/accountLinks
+```
+
+**9. 解除账号关联**
+
+```
+DELETE /v1/accountLinks/$LINK_ID
+```
+
+curl 解除账号关联
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-X DELETE \
+https://dev.imaicloud.com/iam/v1/acccountLinks/yrJKhHOpQ8OG99eN04Amfg
+```
+
+# 9. 定制数据
+
+CustomData资源表示IAM中资源的自定义数据。
+
+在基本资源创建的同时，都会创建空的CustomData资源
+
+**访问CustomData**
+
+```
 GET /v1/$RESOURCE_TYPE/$RESOURCE_ID/customData
+```
 
+curl 查询Account的CustomData
+
+```
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+https://dev.imaicloud.com/iam/v1/accounts/jbrOIebARy2w1Apt1Uw8DA/customData
+```
+
+**自定义数据**
+
+```
 POST /v1/$RESOURCE_TYPE/$RESOURCE_ID/customData
-
-**访问Account的customData**
-
-GET /api/v1/accounts/$ACCOUNT_ID/customData
-
-```
-curl -u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
-https://dev.imaicloud.com/iam/api/v1/accounts/KySQo1c7TTKoFzniA3VLbA/customData
 ```
 
-**设置定制数据**
-
-POST /api/v1/accounts/$ACCOUNT_ID/customData
+curl 自定义数据
 
 ```
-curl -H 'Content-Type: application/json' \
--u $IAM_APIKEY_ID:$IAM_APIKEY_SECRET \
--X POST https://dev.imaicloud.com/iam/api/v1/accounts/06xbdFbrSYug82YrA7hroQ/customData \
--d '{"domain": "demo.imaicloud.com"}'
+curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{"Author":"pat bear"}' \
+https://dev.imaicloud.com/iam/v1/accounts/jbrOIebARy2w1Apt1Uw8DA/customData
 ```
-
-
-
 
 
