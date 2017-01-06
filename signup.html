@@ -151,7 +151,7 @@
 				url: "//dev.imaicloud.com/iam/admin/register",
 				type: "post",
 				contentType: "application/json; charset=utf-8",
-				data: JSON.stringify({"email": un,"username":un,"password": up,"password2":up}),
+				data: JSON.stringify({"email": un,"username":un,"password": htpassword,"password2":htpassword}),
 				success: function(data) {
 
 					setCookie("tenant", data.key);
