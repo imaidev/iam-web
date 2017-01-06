@@ -30,4 +30,4 @@ fi
 #挂载jdbc.properties文件，动态配置数据源
 docker run -d -p 10040:8080 -v /var/owncloud/data/kevin/files/iam/datasource.properties:/usr/local/tomcat/webapps/iam/WEB-INF/classes/datasource.properties iam | tee -a $buildlog
 
-echo "*******************end**************" >> $buildlog
+echo "*******************end**************" >> $buildlog 
