@@ -80,7 +80,10 @@ function init() {
 		viewSucceedArray.push('<img class="user-photo" src="/demo/skins/skin/platform/img/user.jpg"/>');*/
 		viewSucceedArray.push('<div class="user-info">');
 		viewSucceedArray.push('<b>id：</b><span id="id"></span><br>');
-		viewSucceedArray.push('<b>email：</b><span id="uid"></span><br>');
+		viewSucceedArray.push('<b>email：</b><span id="email"></span><br>');
+		viewSucceedArray.push('<b>username：</b><span id="username"></span><br>');
+		viewSucceedArray.push('<b>tenantKey：</b><span id="tenantKey"></span><br>');
+		viewSucceedArray.push('<b>tenant：</b><span id="tenant"></span><br>');
 		viewSucceedArray.push('<b>apiKeys：</b><a onclick="generateApiKeys()">生成apiKeys</a>');
 		viewSucceedArray.push('</div>');
 		viewSucceedArray.push('<div class="exit"><a onclick="logout()">退出</a></div>');
