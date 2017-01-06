@@ -135,14 +135,19 @@
 		function loginAttempt(name, password, tenant){
 			$("#formBtn").prop("disabled", true);
 			$.base64.utf8encode = true;
-			var logininfo = $.base64.encode(name + ":" + password+ ":" + tenant);
+			var value = $.base64.encode(name + ":" + password);
+			var loginInfo={
+				"tenantKey":tenant,
+				"type":"basic",
+				"value":value
+			};
 			
 			$.ajax({
-				url: "//dev.imaicloud.com/iam/api/v1/loginAttempt",
+				url: "//dev.imaicloud.com/iam/admin/login",
 				type: "post",  
-        		crossDomain: true,
+        			crossDomain: true,
 				contentType: "application/json; charset=utf-8",
-				data: JSON.stringify({"type": "basic","value": logininfo}),
+				data: JSON.stringify(loginInfo),
 				success: function(data) {
 					if(data.code=="2000") {
 						$("#hints").show();
