@@ -148,10 +148,10 @@
 			var nameAndPass = htpasswd(un, up, 2);
 			var htpassword = nameAndPass.split(":")[1];
 			$.ajax({
-				url: "//dev.imaicloud.com/iam/api/register",
+				url: "//dev.imaicloud.com/iam/admin/register",
 				type: "post",
 				contentType: "application/json; charset=utf-8",
-				data: JSON.stringify({"email": un,"password": htpassword}),
+				data: JSON.stringify({"email": un,"username":un,"password": up,"password2":up}),
 				success: function(data) {
 
 					setCookie("tenant", data.key);
