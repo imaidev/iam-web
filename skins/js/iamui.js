@@ -21,8 +21,11 @@ $(function(){
 			var payload = $.base64.decode(tokenInfo[1]);
 			var userInfo = JSON.parse(payload);
 			$("#username").text(userInfo.uname);
-			$("#id").text(userInfo.id);
-			$("#uid").text(userInfo.uid);
+			$("#id").text(userInfo.accountId);
+			$("#email").text(userInfo.email);
+			$("#username").text(userInfo.username);
+			$("#tenant").text(userInfo.tenant);
+			$("#tenantKey").text(userInfo.tenantKey);
 			setCookie(CookieKeys.expire, userInfo.exp);
 			setCookie(CookieKeys.payload, tokenInfo[1]);
 			setCookie(CookieKeys.algorithm, tokenInfo[2]);
