@@ -1,6 +1,7 @@
 var I = {
 		//'DOMAIN' : '/demo'
 		'DOMAIN' : 'https://dev.imaicloud.com/iam-web'
+		"IAM-ADMIN":'https://iam-admin.github.io/login.html'
 }
 
 Loader = (function() {
@@ -175,11 +176,11 @@ function downloadFile(fileName, content){
 
 function login() {
 	var href = window.location.href;
-	window.location.href=I.DOMAIN + '/signin.html?redirectURL=' + encodeURIComponent(href);
+	window.location.href=I[IAM-ADMIN] + '/login.html?redirectURL=' + encodeURIComponent(href);
 }
 
 function signup() {
-	window.location.href=I.DOMAIN + '/signup.html';
+	window.location.href=I[IAM-ADMIN] + '/register.html';
 }
 function logout() {
 	delCookies("itoken");
