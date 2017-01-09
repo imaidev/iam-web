@@ -148,9 +148,18 @@ function generateApiKeys() {
 		method: "post",
 		contentType: "application/json; charset=utf-8",
 		sync: false,
-		success: function(apiKeys) {
-			//var apiKeys = $.parseJSON(data);
-			downloadFile("apiKey", apiKeys);
+		success: function(data) {
+			var href=data.href;
+			
+			$.ajax({
+				url:href,
+				method:"GET",
+				success:function(apiKeys){
+					downloadFile("apiKey", apiKeys);
+				}
+			});
+			
+			
 		},
 		error: function(data){
 			alert(data);
