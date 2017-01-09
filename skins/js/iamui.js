@@ -26,6 +26,7 @@ $(function(){
 			$("#tenant").text(userInfo.tenant);
 			$("#tenantKey").text(userInfo.tenantKey);
 			setCookie(CookieKeys.expire, userInfo.exp);
+			setCookie(CookieKeys.tenant,userInfo.tenant);
 			setCookie(CookieKeys.payload, tokenInfo[1]);
 			setCookie(CookieKeys.algorithm, tokenInfo[2]);
 			setCookie(CookieKeys.group, userInfo.group);
