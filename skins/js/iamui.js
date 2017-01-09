@@ -20,7 +20,6 @@ $(function(){
 		} else {
 			var payload = $.base64.decode(tokenInfo[1]);
 			var userInfo = JSON.parse(payload);
-			$("#username").text(userInfo.uname);
 			$("#id").text(userInfo.accountId);
 			$("#email").text(userInfo.email);
 			$("#username").text(userInfo.username);
