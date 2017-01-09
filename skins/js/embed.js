@@ -81,7 +81,6 @@ function init() {
 		viewSucceedArray.push('<div class="user-info">');
 		viewSucceedArray.push('<b>id：</b><span id="id"></span><br>');
 		viewSucceedArray.push('<b>email：</b><span id="email"></span><br>');
-		viewSucceedArray.push('<b>username：</b><span id="username"></span><br>');
 		viewSucceedArray.push('<b>tenantKey：</b><span id="tenantKey"></span><br>');
 		viewSucceedArray.push('<b>tenant：</b><span id="tenant"></span><br>');
 		viewSucceedArray.push('<b>apiKeys：</b><a onclick="generateApiKeys()">生成apiKeys</a>');
