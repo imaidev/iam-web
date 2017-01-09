@@ -152,7 +152,7 @@ function generateApiKeys() {
 		success: function(data) {
 			var index=data.href.lastIndexOf('/');
 			var id=data.href.substring(index+1);
-			var href="https://dev.imaicloud.com/admin/apiKeys/"+id;
+			var href="https://dev.imaicloud.com/admin/v1/apiKeys/"+id;
 			
 			$.ajax({
 				url:href,
