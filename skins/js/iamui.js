@@ -3,6 +3,7 @@ var CookieKeys = {
 	"payload": "imaicloud_payload",
 	"algorithm":"imaicloud_md5",
 	"group":"imaicloud_role",
+	"tenant":"tenant"
 }
 $(function(){
 	// 头像菜单
