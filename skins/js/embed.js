@@ -178,11 +178,11 @@ function downloadFile(fileName, content){
 
 function login() {
 	var href = window.location.href;
-	window.location.href=I.DOMAIN + '/login.html?redirectURL=' + encodeURIComponent(href);
+	window.location.href=I.DOMAIN + '/signin.html?redirectURL=' + encodeURIComponent(href);
 }
 
 function signup() {
-	window.location.href=I.DOMAIN + '/register.html';
+	window.location.href=I.DOMAIN + '/signup.html';
 }
 function logout() {
 	delCookies("itoken");
