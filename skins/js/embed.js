@@ -150,7 +150,9 @@ function generateApiKeys() {
 		contentType: "application/json; charset=utf-8",
 		sync: false,
 		success: function(data) {
-			var href=data.href;
+			var index=data.href.lastIndexOf('/');
+			var id=data.href.substring(index+1);
+			var href="https://dev.imaicloud.com/admin/apiKeys/"+id;
 			
 			$.ajax({
 				url:href,
