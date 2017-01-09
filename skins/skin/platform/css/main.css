@@ -1,0 +1,157 @@
+header .container-fluid{
+	background-color:#000;
+}
+
+header .navbar-header {
+    margin-top: -5px;
+    padding-left: 20px;
+}
+
+.navbar-default .iam-brand{
+    padding-left: 170px;
+    line-height: 30px;
+    color: #fff;
+    background-image: url(../img/logo.png);
+    background-repeat: no-repeat;
+    background-position: 0 bottom;
+}
+
+.navbar-default .iam-brand:hover{
+	color: #fff;
+}
+
+.navbar-default .iam-brand span{
+	font-size: 24px;
+	margin-right:10px;
+}
+
+ 
+.navbar-default .navbar-left>li>a:focus,
+.navbar-default .navbar-left>li>a:hover {
+    color: #ffffff;
+    cursor: pointer;
+    background-color: #32a5e7;
+    border: none;
+}
+
+.navbar-default .navbar-left>li>a{
+    color: #ffffff;
+}
+
+.navbar-default .navbar-right>li>a:focus,
+.navbar-default .navbar-right>li>a:hover {
+    color: #555;
+    cursor: pointer;
+    background-color: #e7e7e7;
+    border: none;
+}
+
+.navbar-default .navbar-right>li>a{
+    color: #ffffff;
+    background-color: #504d4d;
+}
+
+/*************************************************/
+
+.index-content {
+    margin-left: 50px;
+    margin-right:50px;
+}
+
+.index-content .pull-left{
+    margin-left: 300px;
+    margin-top: 100px;
+}
+
+.index-content .pull-right {
+    margin-right: 300px;
+    margin-top: 100px;
+    padding: 25px;
+    background-color: #f7f6f7;
+    border-radius: 2px;
+    box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.31);
+}
+
+.pull-right form label {
+    display: block;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.pull-right form label a {
+    float: right;
+    font-size: 12px;
+}
+
+.pull-right form button{
+    width:100%;
+}
+
+.index-content .pull-center {
+    width: 450px;
+    padding: 35px;
+    border: 2px;
+    margin:120px auto;
+    background-color: #f7f6f7;
+    border-radius: 2px;
+    box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.31);
+}
+
+.pull-center form button{
+    width:100%;
+}
+
+.index-content .avatar {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #ddd;
+}
+
+.pull-center form label {
+    margin-top:10px;
+}
+
+.pull-center form input {
+    margin-bottom:20px;
+}
+
+
+/**********************************************/
+
+.rs-content {
+    margin-top:-20px;
+}
+
+.rs-header {
+    border-bottom: 1px solid;
+}
+
+.rs-header img {
+    margin-left: 40px;
+    margin-top: 20px;
+    margin-right: 15px;
+}
+
+.rs-header h4 {
+    margin-left: 90px;
+    margin-top: -18px;
+}
+
+.ue-menu-left {
+    top:125px;
+    width:160px;
+}
+
+.ue-menu-right {
+    left: 160px;
+    top: 125px;
+    margin-right: 50px;
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+.ue-menu-left ul {
+    padding-left: 40px;
+    padding-top: 20px;
+}
