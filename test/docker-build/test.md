@@ -13,3 +13,5 @@
 2016/12/22：(6) 启动Docker配置，测试IAM-REST的war发布。
 
 2017/1/5：(7) 启动Docker配置，测试IAM-REST的war发布。
+
+2017/1/9：(8) 启动Docker配置，测试IAM-REST的war发布。
