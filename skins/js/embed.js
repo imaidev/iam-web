@@ -1,6 +1,6 @@
 var I = {
 		//'DOMAIN' : '/demo'
-		'DOMAIN' : 'https://dev.imaicloud.com/iam-web'
+		'DOMAIN' : 'https://dev.imaicloud.com/iam-web',
 		"IAM-ADMIN":'https://iam-admin.github.io/login.html'
 }
 
