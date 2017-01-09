@@ -103,18 +103,11 @@ REST API的认证使用Authorization请求头，值为apiKey的id和secret的bas
 注意：当在IAM-Admin中调用面向开发者的REST API时，可以不用API Key保护。
 这考虑到IAM-Admin的特殊性，但是由于API Key除了可以完成API保护之外，还隐式提供tenant信息。
 
-为满足上述情况，IAM-REST同样允许，在API Key保护之后，以下面方式的保护：
-1. 调用面向开发者REST API的URL带有tenant参数
-2. 调用面向开发者REST API的URL带有tenant的cookie
-3. 调用面向开发者REST API的URL含有tenant的Header。
-
-下面内容针对面向开发者的REST API，主要以API Key方式进行保护。
-
 # 2. 租户 Tenant
 
 租户是IAM用于区分资源所属的容器。
 
-**获取当前Tenant**
+**1. 获取当前Tenant**
 
 ```
 GET /v1/tenants/current
@@ -123,11 +116,11 @@ GET /v1/tenants/current
 curl获取当前tenant:
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ  \
+curl -u $APIKEY_ID:$APIKEY_SECRET  \
 https://dev.imaicloud.com/iam/v1/tenants/current
 ```
 
-**获取单个Tenant**
+**2. 获取单个Tenant**
 
 ```
 GET /v1/tenants/$TENANT_ID
@@ -136,11 +129,11 @@ GET /v1/tenants/$TENANT_ID
 curl获取单个Tenant
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ  \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 https://dev.imaicloud.com/iam/v1/tenants/vKVLdcpWT9iT8mUiVV3cew
 ```
 
-**查看某Tenant下的资源**
+**3. 查看某Tenant下的资源**
 
 ```
 GET /v1/tenants/$TENANT_ID/$RESOURCE_TYPE
@@ -150,7 +143,7 @@ GET /v1/tenants/$TENANT_ID/$RESOURCE_TYPE
 curl以accounts为例
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ  \
+curl -u $APIKEY_ID:$APIKEY_SECRET  \
 https://dev.imaicloud.com/iam/v1/tenants/vKVLdcpWT9iT8mUiVV3cew/accounts
 ```
 
@@ -160,33 +153,7 @@ https://dev.imaicloud.com/iam/v1/tenants/vKVLdcpWT9iT8mUiVV3cew/accounts
 Application是IAM关联，管理外部应用的资源形式。
 通过Application资源与账号库资源的映射，可以灵活的改变应用的账号组织。
 
-**获取全部应用**
-
-```
-GET /v1/applications
-```
-
-curl获取全部应用
-
-```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ  \
-https://dev.imaicloud.com/iam/v1/applications
-```
-
-**获取单个应用**
-
-```
-GET /v1/applications/$APP_ID
-```
-
-curl获取单个应用
-
-```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ  \
-https://dev.imaicloud.com/iam/v1/applications/AorQEPNjTQS1NfWUUh4b1A
-```
-
-**创建应用**
+**1. 创建应用**
 
 ```
 POST /v1/applications
@@ -199,14 +166,40 @@ POST /v1/applications
 curl创建Application
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"name":"app001"}' \
 https://dev.imaicloud.com/iam/v1/applications
 ```
 
-**更新应用**
+**2. 获取全部应用**
+
+```
+GET /v1/applications
+```
+
+curl获取全部应用
+
+```
+curl -u $APIKEY_ID:$APIKEY_SECRET  \
+https://dev.imaicloud.com/iam/v1/applications
+```
+
+**3. 获取单个应用**
+
+```
+GET /v1/applications/$APP_ID
+```
+
+curl获取单个应用
+
+```
+curl -u $APIKEY_ID:$APIKEY_SECRET  \
+https://dev.imaicloud.com/iam/v1/applications/AorQEPNjTQS1NfWUUh4b1A
+```
+
+**4. 更新应用**
 
 ```
 POST /v1/applications/$APP_ID
@@ -220,7 +213,7 @@ POST /v1/applications/$APP_ID
 curl更新应用的状态与描述
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"description":"app001","status":"disabled"}' \
@@ -228,7 +221,7 @@ https://dev.imaicloud.com/iam/v1/applications/PQz3_G79S4-4DeXotVF6YA
 ```
 + 更新应用的description为app001,status为disabled
 
-**删除应用**
+**5. 删除应用**
 
 ```
 DELETE /v1/applications/$APP_ID
@@ -237,12 +230,12 @@ DELETE /v1/applications/$APP_ID
 curl删除应用
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -X DELETE \
 https://dev.imaicloud.com/iam/v1/applications/PQz3_G79S4-4DeXotVF6YA
 ```
 
-**应用相关资源查询**
+**6. 应用相关资源查询**
 
 ```
 GET /v1/applications/$APP_ID/$RESOURCE_TYPE
@@ -252,11 +245,11 @@ GET /v1/applications/$APP_ID/$RESOURCE_TYPE
 下面以curl查询accounts
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 https://dev.imaicloud.com/iam/v1/applications/PQz3_G79S4-4DeXotVF6YA/accounts
 ```
 
-**应用登录**
+**7. 应用登录**
 
 ```
 POST /v1/applications/$APP_ID/loginAttempts
@@ -270,7 +263,7 @@ POST /v1/applications/$APP_ID/loginAttempts
 curl登录应用
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"type":"basic","value":"dGVzdDAxQDE2My5jb206dGVzdA=="}' \
@@ -298,7 +291,7 @@ POST /v1/organizations
 curl创建Organization
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"name":"organ001","nameKey":"oran001.demo.org"}' \
@@ -314,7 +307,7 @@ GET /v1/organizations
 curl查询全部组织
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 https://dev.imaicloud.com/iam/v1/organizations
 ```
 
@@ -327,7 +320,7 @@ GET /v1/organizations/$ORGAN_ID
 curl查询单个组织
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 https://dev.imaicloud.com/iam/v1/organizations/LV9EBZS1RlWr70kZJnfvMw
 ```
 
@@ -345,7 +338,7 @@ POST /v1/organizations/$ORGAN_ID
 curl更新组织
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"description":"organ001"}' \
@@ -361,7 +354,7 @@ DELETE /v1/organizations/$ORGAN_ID
 curl删除组织
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -X DELETE \
 https://dev.imaicloud.com/iam/v1/organizations/LV9EBZS1RlWr70kZJnfvMw
 ```
@@ -381,7 +374,7 @@ POST /v1/directories
 curl 创建目录
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"name":"dir000"}' \
@@ -397,7 +390,7 @@ GET /v1/directories
 curl获取全部目录
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 https://dev.imaicloud.com/iam/v1/directories
 ```
 
@@ -410,7 +403,7 @@ GET /v1/directories/$DIR_ID
 curl查询单个目录
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 https://dev.imaicloud.com/iam/v1/directories/OjKmSBzWREmBapqKHtgZEg
 ```
 
@@ -428,7 +421,7 @@ POST /v1/directories/$DIR_ID
 curl更新目录
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"description":"dir000","status":"disabled"}' \
@@ -444,7 +437,7 @@ DELETE /v1/directories/$DIR_ID
 curl删除目录
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -X DELETE \
 https://dev.imaicloud.com/iam/v1/directories/OjKmSBzWREmBapqKHtgZEg
 ```
@@ -460,7 +453,7 @@ GET /v1/directories/$DIR_ID/$RESOURCE_TYPE
 curl查询accounts
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 https://dev.imaicloud.com/iam/v1/directories/OjKmSBzWREmBapqKHtgZEg/accounts
 ```
 
@@ -485,7 +478,7 @@ POST /v1/directories/$DIR_ID/groups
 curl创建分组
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"name":"group001"}' \
@@ -501,7 +494,7 @@ GET /v1/groups
 curl 查询全部分组
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 https://dev.imaicloud.com/iam/v1/groups
 ```
 
@@ -514,7 +507,7 @@ GET /v1/groups/$GROUP_ID
 curl 查询单个分组
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 https://dev.imaicloud.com/iam/v1/groups/LR8v0aDjS7ufDRhWchNyAw
 ```
 
@@ -533,14 +526,28 @@ POST /v1/groups/$GROUP_ID
 curl 更新分组
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"name":"group001-a"}' \
 https://dev.imaicloud.com/iam/v1/groups/LR8v0aDjS7ufDRhWchNyAw
 ```
 
-**5. 查询分组的相关资源**
+**5. 删除分组**
+
+```
+ DELETE /v1/groups/$GROUP_ID
+```
+
+curl 删除分组
+
+```
+curl -u $APIKEY_ID:$APIKEY_SECRET \
+-X DELETE \
+https://dev.imaicloud.com/iam/v1/groups/LR8v0aDjS7ufDRhWchNyAw
+```
+
+**6. 查询分组的相关资源**
 
 ```
 GET /v1/groups/$GROUP_ID/$RESOURCE_TYPE
@@ -551,22 +558,8 @@ GET /v1/groups/$GROUP_ID/$RESOURCE_TYPE
 curl 查询分组相关的aplication
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 https://dev.imaicloud.com/iam/v1/groups/LR8v0aDjS7ufDRhWchNyAw/applications
-```
-
-**6. 删除分组**
-
-```
- DELETE /v1/groups/$GROUP_ID
-```
-
-curl 删除分组
-
-```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
--X DELETE \
-https://dev.imaicloud.com/iam/v1/groups/LR8v0aDjS7ufDRhWchNyAw
 ```
 
 # 7. 账号 Account
@@ -595,7 +588,7 @@ POST /v1/organizations/$ORGAN_ID/accounts
 curl 在目录下创建账号
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"email":"account001@163.com","password":"accout001"}' \
@@ -611,7 +604,7 @@ GET /v1/accounts
 curl 查询全部账号
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 https://dev.imaicloud.com/iam/v1/accounts
 ```
 
@@ -624,7 +617,7 @@ GET /v1/accounts/$ACCOUNT_ID
 curl 查询单个账号
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 https://dev.imaicloud.com/iam/v1/accounts/jbrOIebARy2w1Apt1Uw8DA
 ```
 
@@ -643,7 +636,7 @@ POST /v1/accounts/$ACCOUNT_ID
 curl 更新status
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"status":"unverified"}' \
@@ -661,7 +654,7 @@ GET /v1/accounts/$ACCOUNT_ID/$RESOURCE_TYPE
 curl 查看groups
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 https://dev.imaicloud.com/iam/v1/accounts/jbrOIebARy2w1Apt1Uw8DA/groups
 ```
 
@@ -682,7 +675,7 @@ POST /v1/groupMemberships
 curl 创建GroupMembership
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"group":"SfGQSQtEQym9YWZq5txUcg","account":"2YO9-INGSx-rabcvmtKemA"}' \
@@ -698,7 +691,7 @@ DELETE /v1/groupshipMemberships/$GM_ID
 curl 解除账号与分组的关联：
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 -X DELETE \
 https://dev.imaicloud.com/iam/v1/groupMemberships/8e24otZ2S0SPSaYvSgfwPA
 ```
@@ -720,7 +713,7 @@ POST /v1/accountLinks
 curl 关联账号
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"leftAccount":"0jxyzoXNS4SjMCDBuPQPrQ","rightAccount":"2YO9-INGSx-rabcvmtKemA"}' \
@@ -736,7 +729,7 @@ DELETE /v1/accountLinks/$LINK_ID
 curl 解除账号关联
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 -X DELETE \
 https://dev.imaicloud.com/iam/v1/acccountLinks/yrJKhHOpQ8OG99eN04Amfg
 ```
@@ -747,7 +740,7 @@ CustomData资源表示IAM中资源的自定义数据。
 
 在基本资源创建的同时，都会创建空的CustomData资源
 
-**访问CustomData**
+**1. 访问CustomData**
 
 ```
 GET /v1/$RESOURCE_TYPE/$RESOURCE_ID/customData
@@ -756,11 +749,11 @@ GET /v1/$RESOURCE_TYPE/$RESOURCE_ID/customData
 curl 查询Account的CustomData
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 https://dev.imaicloud.com/iam/v1/accounts/jbrOIebARy2w1Apt1Uw8DA/customData
 ```
 
-**自定义数据**
+**2. 自定义数据**
 
 ```
 POST /v1/$RESOURCE_TYPE/$RESOURCE_ID/customData
@@ -769,7 +762,7 @@ POST /v1/$RESOURCE_TYPE/$RESOURCE_ID/customData
 curl 自定义数据
 
 ```
-curl -u hygnzMy2F1K-5WMQ4aonew:CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ \
+curl -u $APIKEY_ID:$APIKEY_SECRE \
 -H 'Content-Type: application/json' \
 -X POST \
 -d '{"Author":"pat bear"}' \
