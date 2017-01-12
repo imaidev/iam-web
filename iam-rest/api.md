@@ -3,49 +3,23 @@
 
 ## iam scene-imaicloud 使用说明
 
-# 1. IAM-REST/IAM-Admin
+本文档是IAM-REST的入门文档，目的是能够帮助开发者利用IAM-REST提供的REST API，完成注册、认证、用户管理的基本功能。
 
-## 1.1 IAM-REST与IAM-Admin简单说明
-
-**IAM-REST**
-
-IAM-REST是提供REST API的后台服务。
-IAM-REST是无状态的，不存在会话管理。
-
-IAM-REST提供的REST API分为两类：
-1. 面向开发者的REST API:以/v1开头
-2. 面向IAM-Admin的REST API：以/admin开头
-
-面向开发者的REST API一般需要使用API Key保护；但面向IAM-Admin的REST API则不需要API Key保护。
-
-
-**IAM-Admin**
-
-IAM-Admin需要调用IAM-REST的服务，从而完成管理控制台功能。
-注意：在IAM-Admin中，可以调用面向IAM-Admin的REST API和面向开发者的REST API。
-
-IAM-Admin的主要功能点包括两大点：
-+ 注册/登录
-+ 资源管理
-
-IAM-Admin是IAM-REST的REST API调用的可视化展示。
-IAM-Admin作为一个管理控制台，存在会话管理，但IAM-REST并不提供对IAM-Admin的会话管理（是否可以提供）。
-这样，IAM-Admin与IAM-REST形成了:纯前端+REST-API的应用架构。
-而IAM-Admin要实现会话管理，则需要以客户端的方式保持会话状态。具体方式可以是cookie，token，URL参数等。
-
-
-## 1.2 面向IAM-Admin的REST API
-
-面向控制台的REST API现阶段主要包括两个功能：注册与登录。
-
-**1. 注册**
-
-IAM-Admin注册，在提供邮箱,用户名，密码之后，即可创建IAM-Admin的一个租户，同时创建所需要的账号。
-
-REST API访问如下
+开发者在调用REST API之前，需要使用API Key。
+IAM-REST通过对API Key的验证，保护被访问的REST API。
+这里提供默认的API Key：
 
 ```
-POST /admin/register
+API_KEY=hygnzMy2F1K-5WMQ4aonew
+API_SECRET=CwBBiTtUV57Pxz7pwpMyGPiF6foHipYZy9us1MpoaxQ
+```
+
+# 1. 注册/登录
+## 1.1 注册
+注册IAM的账号，需要提供邮箱、密码、用户名。
+
+```
+POST /v1/applications/$APP_ID/accounts
 
 {
  "email":$EMAIL,
@@ -54,54 +28,176 @@ POST /admin/register
  "password2":$PWD2
 }
 ```
++ $APP_ID：应用id
 
-通过curl访问如下
+IAM会为使用IAM进行认证的应用，提供ID。应用（Application）是IAM中的一种资源，用于对接使用IAM的各种应用。
+
+IMAI平台使用的ID为nnwpouLzSLCZQhd4rY86Wg
+
+curl注册账号
 
 ```
-curl -H 'Content-Type: application/json' \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
+-H 'Content-Type: application/json' \
 -X POST \
--d '{"email":"test00@163.com","username":"test00","password":"test00","password2":"test00"}' \
-https://dev.imaicloud.com/iam/admin/register
+-d '{"email":"account01@me.com","username":"account01","password":"123456"}' \
+https://dev.imaicloud.com/iam/applications/nnwpouLzSLCZQhd4rY86Wg/accounts
 ```
 
-**2. 登录**
+## 1.2 登录
 
-登录时，需要使用租户名（不要忘记），同时需要提供邮箱与密码。
+登录账号，最基本的需要是提供邮箱与密码，调用API之后，返回账号的基本信息。
 
-REST API访问如下
+最基本的形式如下所示
 
 ```
-POST /admin/login
+POST /v1/applications/$APP_ID/loginAttempts
 
 {
- "tenantKey":$TENENT_KEY,
- "type":"basic",
+ "type":"Basic",
  "value":$VALUE
 }
 ```
++ type：Basic，确定认证方式是基本认证
++ value：Basic认证时传入的值Base64($email:$password)
 
-通过curl访问如下所示
+按照上面的形式，返回的结果是登录账号的信息。
+
+curl登录应用
 
 ```
-curl -H 'Content-Type: application/json' \
+curl -u $APIKEY_ID:$APIKEY_SECRET \
+-H 'Content-Type: application/json' \
 -X POST \
--d '{"tenantKey":"vdaggr-ypyyyy","type":"basic","value":"dGVzdDAxQDE2My5jb206dGVzdA=="}' \
+-d '{"type":"Basic","value":"YWNjb3VudDAzQG1lLmNvbToxMjM0NTY="}' \
 https://dev.imaicloud.com/iam/admin/login
 ```
-+ tenantKey：vdaggr-ypyyyy
-+ type：basic（暂时只提供基本认证）
-+ value是email：password的base64编码值,实际的邮箱和密码是test01@163.com和test
++ value是account03@me.com:123456的Base64编码
 
-**3. API Key**
+**IMAI**
 
-租户账号登录后，在头像菜单中，点击“生成apiKeys”，将得到一个包含apiKey id和secret的文件。
-请妥善保管API Key文件，后面使用的所有REST API访问都需要通过api key。
+针对IMAI的需求，可以生成专门定制的token。此时的请求参数会增加token选项，如下所示。
 
-REST API的认证使用Authorization请求头，值为apiKey的id和secret的base64编码base64($ID:$SECRET)。
-使用linux curl测试，可设置变量$IAM_APIKEY_ID、$IAM_APIKEY_SECRET，值分别apiKeys的id和secret。
+```
+POST /v1/applications/$APP_ID/loginAttempts
 
-注意：当在IAM-Admin中调用面向开发者的REST API时，可以不用API Key保护。
-这考虑到IAM-Admin的特殊性，但是由于API Key除了可以完成API保护之外，还隐式提供tenant信息。
+{
+ "type":"Basic",
+ "value":$VALUE,
+ "token":"true"
+}
+```
++ token参数：是可选参数，表明是否生成token。
+
+（现阶段的token是按照IMAI的格式写成的token，没有提供面向开发者的灵活的定制方案。）
+
+curl请求返回token
+
+```
+curl -u $APIKEY_ID:$APIKEY_SECRET \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{"type":"Basic","value":"YWNjb3VudDAzQG1lLmNvbToxMjM0NTY=","token":"true"}' \
+https://dev.imaicloud.com/iam/admin/login
+```
+
+返回的json结果如下所示
+
+```
+{
+  "id": "T0Hf91e4QfiSaRQnTRqTpA",
+  "href": "https://dev.imaicloud.com/iam/admin/v1/accounts/T0Hf91e4QfiSaRQnTRqTpA",
+  "username": "account03",
+  "email": "account03@me.com",
+ ...,
+  "itoken": "eyJhbGciOiJOR0lOWE1ENSIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3d3cuaW1haWNsb3VkLmNvbSIsImlzcyI6ImlhbS5pbnNwdXIuY29tIiwiZXhwIjoxNDg0MjEwODU2MTYwLCJpYXQiOjE0ODQyMDkwNTYxNjAsImFjY291bnRJZCI6IlQwSGY5MWU0UWZpU2FSUW5UUnFUcEEiLCJlbWFpbCI6ImFjY291bnQwM0BtZS5jb20iLCJ1c2VybmFtZSI6ImFjY291bnQwMyIsImdyb3VwIjoiYWRtaW4ifQ.u5AksCbLacAQSBOCJAdl-Q"
+}
+```
+
+返回结果比正常返回多itoken项。itoken是参照JWT实现的token。
+
+JWT以点号(.)分为三部分：Header，payload，signature
+
+*Header*
+
+```
+eyJhbGciOiJOR0lOWE1ENSIsInR5cCI6IkpXVCJ9
+```
+
+Base64解码后
+
+```
+{"alg":"NGINXMD5","typ":"JWT"}
+```
+
+*payload*
+
+```
+eyJhdWQiOiJ3d3cuaW1haWNsb3VkLmNvbSIsImlzcyI6ImlhbS5pbnNwdXIuY29tIiwiZXhwIjoxNDg0MjEwODU2MTYwLCJpYXQiOjE0ODQyMDkwNTYxNjAsImFjY291bnRJZCI6IlQwSGY5MWU0UWZpU2FSUW5UUnFUcEEiLCJlbWFpbCI6ImFjY291bnQwM0BtZS5jb20iLCJ1c2VybmFtZSI6ImFjY291bnQwMyIsImdyb3VwIjoiYWRtaW4ifQ
+```
+
+Base64解码后
+
+```
+{
+"aud":"www.imaicloud.com",
+"iss":"iam.inspur.com",
+"exp":1484210856160,
+"iat":1484209056160,
+"accountId":"T0Hf91e4QfiSaRQnTRqTpA",
+"email":"account03@me.com",
+"username":"account03",
+"group":"admin"
+}
+```
+
+payload是包含所需要的主要信息。
++ aud：接收Token的应用
++ iss：签发Token的应用
++ exp：超时时间
++ iat：签发Token的时间
++ accountId：可定制，账号ID
++ email：可选，账号邮箱
++ username：可选，账号用户名
++ group：角色
+
+*signature*
+
+```
+u5AksCbLacAQSBOCJAdl-Q
+```
+
+按照IMAI的nginx配置所需token认证的md5签名。
+
+**Secret**
+
+IMAI中nginx需要IAM能够提供secret，完成对于返回的itoken的认证。
+
+IAM为满足IMAI的需求，将secret写入登录账号的自定义数据customData中。
+IMAI可以通过获取账号的customData获取secret。
+
+```
+GET /v1/accounts/$ACCOUNT_ID/customData
+```
+
+curl访问账号的自定义数据
+
+```
+curl -u $APIKEY_ID:$APIKEY_SECRET  \
+https://dev.imaicloud.com/iam/v1/accounts/T0Hf91e4QfiSaRQnTRqTpA/customData
+```
++ T0Hf91e4QfiSaRQnTRqTpA是在登录时获取的账号ID。
+
+返回结果
+
+```
+{
+  ...
+  "data": {
+    "secret": "p7cpVH6j2eyaqrOCjTAZXbwnmBEo9mAaubfZa/3H8LI"
+  }
+}
+```
 
 # 2. 租户 Tenant
 
