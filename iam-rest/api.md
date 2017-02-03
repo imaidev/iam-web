@@ -3,8 +3,57 @@
 
 ## iam scene-imaicloud 使用说明
 
-本文档是IAM-REST的入门文档，目的是能够帮助开发者利用IAM-REST提供的REST API，完成注册、认证、用户管理的基本功能。
+本文档简单介绍如何通过curl获取iam的rest资源。虽然像登录，注册等动作行为并不是rest资源，但iam也提供类似的restful服务，以方便做到前后端的分离。
 
+下面简单介绍下iam。iam全称Identity Authentication Management，就是身份认证管理。iam仿照stormpath，同时做了一定的简化。iam中的主要资源包括租户Tenant，账号Account，目录Directory，分组Group，自定义数据CustomData等。下面简单介绍iam的操作流程。
+
+# 1. iam注册
+
+iam注册需要用户提供邮箱，用户名，密码。iam为用户分配租户Tenant，并创建初始的账号Account，目录Directory等。
+
+```
+{
+	"email":"test01@163.com",
+	"username":"test01",
+	"password":"123456",
+	"password2":"123456"
+}
+```
+
+curl访问
+
+```
+curl -H 'Content-Type:application/json' \
+-X POST \
+-d '{"email":"test01@163.com","username":"test01","password":"123456","password2":"123456"}' \
+https://dev.imaicloud.com/iam/admin/register
+```
+# 2. iam登录
+
+iam注册完毕之后，会返回登录需要的租户Key，会在登录iam时用到。
+
+```
+{
+	"type":"Basic",
+	"value":"dGVzdDAxQDE2My5jb206MTIzNDU2",
+	"tenantKey":$TENANT_KEY,
+	"token":"true"
+}
+```
+
+$TENANT_KEY是注册时返回的值。value是email:password的Base64编码。
+
+```
+curl -H 'Content-Type:application/json' \
+-X POST \
+-d '{"type":"Basic","value":"dGVzdDAxQDE2My5jb206MTIzNDU2","tenantKey":"nufjlf-slzvnr","token":"true"}' \
+https://dev.imaicloud.com/iam/admin/login
+```
+iam登录成功后会获得两个很重要的凭据：
+1. API KEY
+2. token
+
+API KEY与token是在后面进行的
 开发者在调用REST API之前，需要使用API Key。
 IAM-REST通过对API Key的验证，保护被访问的REST API。
 这里提供默认的API Key：
