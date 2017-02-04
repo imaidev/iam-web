@@ -91,7 +91,7 @@ imai的nginx的验证模块所需要的参数包含在token中，由于nginx支�
 上面主要在介绍访问iam的rest资源的两个凭据API KEY与token的使用，并以当前tenant举例。实际上，tenant有众多的rest资源可以访问。
 租户是IAM用于区分资源所属的容器，可以直接通过租户的ID获取租户。（当然我们只能获取自己的租户，这由API KEY，或token决定）
 
-
+$TENANT_ID可以在上节获取当前租户的返回信息中获得。
 ```
 GET /v1/tenants/$TENANT_ID
 ```
@@ -99,8 +99,10 @@ GET /v1/tenants/$TENANT_ID
 
 ```
 curl -u $APIKEY_ID:$APIKEY_SECRET \
-https://devimaicloud.com/iam/v1/tenants/ULvrPudaQfqBhZWV2uqvLQ
+https://dev.imaicloud.com/iam/v1/tenants/ULvrPudaQfqBhZWV2uqvLQ
 ```
++ ULvrPudaQfqBhZWV2uqvLQ是iam注册时创建的Tenant租户资源的ID
+
 
 tenant包含所有的资源，如账号Account，目录Directory等。查看方式如下所示。
 
@@ -110,12 +112,10 @@ GET /v1/tenants/$TENANT_ID/$RESOURCE_TYPE
 + RESOURCE_TYPE可以是applications,organizations.directories,groups,accounts
 
 
-
 ```
 curl -u $APIKEY_ID:$APIKEY_SECRET  \
 https://dev.imaicloud.com/iam/v1/tenants/ULvrPudaQfqBhZWV2uqvLQ/accounts
 ```
-
 
 # 4. 应用 Application
 
@@ -141,130 +141,104 @@ curl -u $APIKEY_ID:$APIKEY_SECRET \
 -d '{"name":"app001"}' \
 https://dev.imaicloud.com/iam/v1/applications
 ```
+创建应用后，返回应用的id与href信息。
 
-**2. 获取全部应用**
 
-```
-GET /v1/applications
-```
-
-curl获取全部应用
-
-```
-curl -u $APIKEY_ID:$APIKEY_SECRET  \
-https://dev.imaicloud.com/iam/v1/applications
-```
-
-**3. 获取单个应用**
+**2. 获取单个应用**
 
 ```
 GET /v1/applications/$APP_ID
 ```
 
-**4. 更新应用**
+```
+curl -u $APIKEY_ID:$APIKEY_SECRET \
+https://dev.imaicloud.com/iam/v1/applications/3wylhfo6RDm-OGRAUQj45Q
+```
++ 3wylhfo6RDm-OGRAUQj45Q是创建Application应用资源获得的ID
+
+**3. 更新应用**
 
 ```
 POST /v1/applications/$APP_ID
 
 {
- "status":"disable"
- ...
+ "appStatus":"disabled"
 }
 ```
 
+```
+curl -u $APIKEY_ID:$APIKEY_SECRET \
+-H 'Content-Type:application/json' \
+-X POST \
+-d '{"appStatus":"enabled"}' \
+https://dev.imaicloud.com/iam/v1/applications/3wylhfo6RDm-OGRAUQj45Q
+```
 
-**5. 删除应用**
+
+
+**4. 删除应用**
 
 ```
 DELETE /v1/applications/$APP_ID
 ```
 
+```
+curl -u $APIKEY_ID:$APIKEY_SECRET \
+-X DELETE \
+https://dev.imaicloud.com/iam/v1/applications/3wylhfo6RDm-OGRAUQj45Q
+```
 
-**6. 应用相关资源查询**
+
+**5. 应用相关资源查询**
 
 ```
 GET /v1/applications/$APP_ID/$RESOURCE_TYPE
 ```
 
 可以查询的Resource可以是accounts，groups
-下面以curl查询accounts
 
 
-**7. 应用登录**
+**6. 应用登录**
 
-应用的登录与iam的登录不同。iam中的应用Application资源，假定每个应用都有一批属于自己的用户，比如App01有user11，user12等，App02有user21,user22等。不同应用对应不同的用户体系。而所有的用户，无论是App01对应的用户，还是App02对应的用户都是iam的Account资源。
+应用的登录与iam的登录不同。
+
+iam中的应用Application资源，假定每个应用都有一批属于自己的用户，比如App01有user11，user12等，App02有user21,user22等。
+不同应用对应不同的用户体系。而所有的用户，无论是App01对应的用户，还是App02对应的用户都是iam的Account资源。
 而iam正是因为Application资源的存在，才能够面向多应用提供认证服务。
-而在上面解释之后，就会发现iam的登录是属于更为高级的登录，它不具体于任何应用，而仅仅是为了用户体系的创建而做的准备。
+
+iam的登录是属于更为高级的登录，它不具体于任何应用，而仅仅是为了用户体系的创建而做的准备。
+
+由于新创建的app01的应用中并不存在账号Account，因此可以使用在iam注册时默认创建的应用进行验证。
+首先是要获取默认的应用，可以通过如下的REST请求获取
+
+```
+GET /v1/tenants/$TENANT_ID/applications
+```
++ 默认创建的应用资源的名称为IAM Admin，在Tenant中应用名是唯一的。
+默认的IAM Admin资源有账号test01@163.com与之关联，登录方式与iam登录类似，但不提供tenantKey。
 
 ```
 POST /v1/applications/$APP_ID/loginAttempts
 
 {
- "type":"basic",
- "value":$VALUE
+ "type":"Basic",
+ "value":$VALUE,
+ "token":"true"
 }
 ```
-
-
-# 5. 组织 Oranization
-
-如果说，Application资源的存在让iam能够为不同的应用提供不同的账号体系。而Organization资源的存在则是为了应对多租户应用的情况。多租户应用是指，一个应用可能会对应不同的账号体系。而Organization资源就为这一层租户的抽象提供数据模型。
-需要注意的是，对于某个应用的租户使用的是Oranization资源表示，而不是Tenant资源。虽然Tenant资源是租户意义，但是它针对的是iam。
-
-**1. 创建组织**
-
-```
-POST /v1/organizations
-
-{
- "name":$ORGAN_NAME,
- "nameKey":$ORGAN_KEY
-}
-```
-+ name是组织Organization的名字
-+ nameKey是针对多租户应用是，每个Organization对应不同的DNS名字
-
-
-**2. 查询全部组织**
-
-```
-GET /v1/organizations
-```
-
-curl查询全部组织
 
 ```
 curl -u $APIKEY_ID:$APIKEY_SECRET \
-https://dev.imaicloud.com/iam/v1/organizations
+-H 'Content-Type:application/json' \
+-X POST \
+-d '{"type":"Basic","value":"dGVzdDAxQDE2My5jb206MTIzNDU2","token":"true"}' \
+https://dev.imaicloud.com/iam/v1/applications/3wylhfo6RDm-OGRAUQj45Q/loginAttempts
 ```
 
-**3. 查询单个组织**
+# 5. 目录 Direcctory
 
-```
-GET /v1/organizations/$ORGAN_ID
-```
+上一节对于Application资源进行crud操作，在接下来操作iam的rest资源时将不对curl进行描述，只是描述rest请求模型。
 
-
-**4. 更新组织**
-
-```
-POST /v1/organizations/$ORGAN_ID
-
-{
- "status":...,
- "description":...
-}
-```
-
-
-**5. 删除组织**
-
-```
-DELETE /v1/organizations/$ORGAN_ID
-```
-
-
-# 6. 目录 Direcctory
 
 **1. 创建目录**
 
@@ -276,15 +250,6 @@ POST /v1/directories
 }
 ```
 
-curl 创建目录
-
-```
-curl -u $APIKEY_ID:$APIKEY_SECRET \
--H 'Content-Type: application/json' \
--X POST \
--d '{"name":"dir000"}' \
-https://dev.imaicloud.com/iam/v1/directories
-```
 
 **2. 查询全部目录**
 
@@ -292,12 +257,6 @@ https://dev.imaicloud.com/iam/v1/directories
 GET /v1/directories
 ```
 
-curl获取全部目录
-
-```
-curl -u $APIKEY_ID:$APIKEY_SECRET \
-https://dev.imaicloud.com/iam/v1/directories
-```
 
 **3. 查询单个目录**
 
@@ -312,8 +271,7 @@ GET /v1/directories/$DIR_ID
 POST /v1/directories/$DIR_ID
 
 {
- "description":...
- "status":...
+ "directoryStatus":"disabled"
 }
 ```
 
@@ -332,7 +290,7 @@ GET /v1/directories/$DIR_ID/$RESOURCE_TYPE
 可以查询的相关资源有：group，account
 
 
-# 7. 分组 Group
+# 6. 分组 Group
 
 分组，是对目录中的账号增加分类，相当于给予账号不同的角色。
 Group必须在指定目录下创建。
@@ -351,45 +309,30 @@ POST /v1/directories/$DIR_ID/groups
 + 可选参数：description,status
 
 
-**2. 查询全部分组**
-
-```
-GET /v1/groups
-```
-
-curl 查询全部分组
-
-```
-curl -u $APIKEY_ID:$APIKEY_SECRET \
-https://dev.imaicloud.com/iam/v1/groups
-```
-
-**3. 查询单个分组**
+**2. 查询单个分组**
 
 ```
 GET /v1/groups/$GROUP_ID
 ```
 
-**4. 更新分组**
+**3. 更新分组**
 
 ```
 POST /v1/groups/$GROUP_ID
 
 {
- "name":...,
- ...
+ "groupStatus":"disabled"
 }
 ```
-+ 可用于更新的Group字段：name,description,status
 
 
-**5. 删除分组**
+**4. 删除分组**
 
 ```
  DELETE /v1/groups/$GROUP_ID
 ```
 
-**6. 查询分组的相关资源**
+**5. 查询分组的相关资源**
 
 ```
 GET /v1/groups/$GROUP_ID/$RESOURCE_TYPE
@@ -398,7 +341,7 @@ GET /v1/groups/$GROUP_ID/$RESOURCE_TYPE
 分组可以查询的基本资源包括：accounts，applications
 
 
-# 8. 账号 Account
+# 7. 账号 Account
 
 账号是IAM的核心资源，属于目录。
 通过与其他资源相互关联，形成灵活的账号体系。
@@ -411,9 +354,8 @@ POST /v1/applications/$APP_ID/accounts
 POST /v1/organizations/$ORGAN_ID/accounts
 
 {
- "email":...,
- "password":...,
- ...
+ "email":"test02@163.com",
+ "password":"123456"
 }
 ```
 + 账号可以在目录，应用，组织下创建。
@@ -422,46 +364,32 @@ POST /v1/organizations/$ORGAN_ID/accounts
 + 可选字段：username,status,description
 
 
-**2. 查询全部账号**
-
-```
-GET /v1/accounts
-```
-
-curl 查询全部账号
-
-```
-curl -u $APIKEY_ID:$APIKEY_SECRE \
-https://dev.imaicloud.com/iam/v1/accounts
-```
-
-**3. 查询单个账号**
+**2. 查询单个账号**
 
 ```
 GET /v1/accounts/$ACCOUNT_ID
 ```
 
-**4. 更新账号**
+**3. 更新账号**
 
 ```
 POST /v1/accounts/$ACCOUNT_ID
 
 {
- "username":...,
+ "userName":"test03"
  ...
 }
 ```
-+ account可以更新的字段包括：email,username,password,status
 
-**5. 查看关联资源**
+**4. 查看关联资源**
 
 ```
 GET /v1/accounts/$ACCOUNT_ID/$RESOURCE_TYPE
 ```
 
-账号可以查看的资源主要是：group
+账号可以查看的资源主要是：groups
 
-**6. 关联分组与账号**
+**5. 关联分组与账号**
 
 GroupMembership在IAM表示分组Group与账号Account的关联关系，可以解释为将账号添加入分组；或者将某角色赋予账号
 
@@ -476,13 +404,13 @@ POST /v1/groupMemberships
 + 必选字段：group,account
 
 
-**7. 解除账号与分组的关联**
+**6. 解除账号与分组的关联**
 
 ```
 DELETE /v1/groupshipMemberships/$GM_ID
 ```
 
-**8. 关联账号**
+**7. 关联账号**
 
 AccountLink资源用于关联位于不同目录的账号。
 
@@ -496,13 +424,13 @@ POST /v1/accountLinks
 ```
 + 必选字段：leftAccount,rightAccount
 
-**9. 解除账号关联**
+**8. 解除账号关联**
 
 ```
 DELETE /v1/accountLinks/$LINK_ID
 ```
 
-# 9. 定制数据
+# 8. 定制数据
 
 CustomData资源表示IAM中资源的自定义数据。
 
