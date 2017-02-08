@@ -1,0 +1,115 @@
+- config:
+    - testset: "iam"
+    - variable_binds: {iam: '/iam-rest-maven'}
+
+- test:
+    - group: "admin"
+    - name: "register iam"
+    - url: {template: "$iam/admin/register"}
+    - method: "POST"
+    - headers: {'Content-Type': 'application/json'}
+    - body: '{"email": "test01@163.com","username": "test01","password": "123456","password2": "123456"}'
+    - validators:
+        - extract_test: {jsonpath_mini: "tenantKey",test: "exists"}
+    - extract_binds:
+        - 'tenantKey': {'jsonpath_mini': 'tenantKey'}
+
+- test:
+    - group: "admin"
+    - name: "login iam"
+    - url: {template: "$iam/admin/login"}
+    - method: "POST"
+    - headers: {'Content-Type': 'application/json'}
+    - body: {template: '{"type": "Basic", "value": "dGVzdDAxQDE2My5jb206MTIzNDU2", "tenantKey": "$tenantKey", "token": "true"}'}
+    - validators:
+        - extract_test: {jsonpath_mini: "token", test: "exists"}
+    - extract_binds:
+        - 'globalToken': {'jsonpath_mini': 'token'}
+
+- test:
+    - group: "tenant"
+    - name: "Get current Tenant"
+    - url: {template: "$iam/v1/tenants/current"}
+    - headers: {template: {"X-Auth-Token": "$globalToken"}}
+    - validators:
+        - extract_test: {jsonpath_mini: "id", test: "exists"}
+    - extract_binds:
+        - 'tenant_id': {'jsonpath_mini': 'id'}
+
+- test:
+    - group: "tenant"
+    - name: "GET Tenant"
+    - url: {template: "$iam/v1/tenants/$tenant_id"}
+    - headers: {template: {"X-Auth-Token": "$globalToken"}}
+
+
+- test:
+    - group: "application"
+    - name: "CREATE Application"
+    - url: {template: "$iam/v1/applications"}
+    - method: "POST"
+    - headers: {template: {"X-Auth-Token": "$globalToken", "Content-Type": "application/json"}}
+    - body: '{"name": "app01"}'
+    - validators:
+        - extract_test: {jsonpath_mini: "id", test: "exists"}
+    - extract_binds:
+        - 'app_id': {'jsonpath_mini': 'id'}
+
+- test:
+    - group: "application"
+    - name: "GET Application to comfirm status is enabled"
+    - url: {template: "$iam/v1/applications/$app_id"}
+    - headers: {template: {"X-Auth-Token":"$globalToken"}}
+    - validators:
+        - compare: {jsonpath_mini: "status", comparator: "eq", expected: "enabled"}
+
+- test:
+    - group: "application"
+    - name: "Update Application to change status to disabled"
+    - url: {template: "$iam/v1/applications/$app_id"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': "$globalToken","Content-Type": "application/json"}}
+    - body: '{"status": "disabled"}'
+
+- test:
+    - group: "application"
+    - name: "Get Application to comfirm status is disabled"
+    - url: {template: "$iam/v1/applications/$app_id"}
+    - headers: {template: {"X-Auth-Token": "$globalToken"}}
+    - validators:
+        - compare: {jsonpath_mini: "status", comparator: "eq", expected: "disabled"}
+
+- test:
+    - group: "application"
+    - name: "Delete application"
+    - url: {template: "$iam/v1/applications/$app_id"}
+    - method: "DELETE"
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+
+- test:
+    - group: "application"
+    - name: "comfirm application has been deleted"
+    - url: {template: "$iam/v1/applications/$app_id"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - extract_test: {jsonpath_mini: "id", test: "not_exists" }
+
+- test:
+    - group: "directory"
+    - name: "Create directory"
+    - url: {template: "$iam/v1/directories"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"name": "dir01"}'
+    - validators:
+        - extract_test: {jsonpath_mini: "id", test: "exists"}
+    - extract_binds:
+        - 'dir_id': {'jsonpath_mini': 'id'}
+
+- test:
+    - group: "directory"
+    - name: "Get directory to confirm status is enabled"
+    - url: {template : "$iam/v1/directories/$dir_id"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: "status", comparator: "eq", expected: "enabled"}
