@@ -6,6 +6,7 @@
 本文档简单介绍如何通过curl获取iam的rest资源。虽然像登录，注册等动作行为并不是rest资源，但iam也提供类似的restful服务，以方便做到前后端的分离。
 
 下面简单介绍下iam。iam全称Identity Authentication Management，就是身份认证管理。iam仿照stormpath，同时做了一定的简化。iam中的主要资源包括租户Tenant，账号Account，目录Directory，分组Group，自定义数据CustomData等。下面简单介绍iam的操作流程。
+iam的API测试，参照pyresttest，相应的[yaml文件地址](https://github.com/imaidev/iam-web/edit/gh-pages/iam-rest/iam.yaml)
 
 # 1. iam注册
 
