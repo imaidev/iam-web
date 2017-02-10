@@ -1,6 +1,6 @@
 - config:
     - testset: "iam"
-    - variable_binds: {iam: '/iam-rest-maven'}
+    - variable_binds: {iam: '/iam'}
 
 - test:
     - group: "admin"
@@ -80,21 +80,6 @@
         - compare: {jsonpath_mini: "status", comparator: "eq", expected: "disabled"}
 
 - test:
-    - group: "application"
-    - name: "Delete application"
-    - url: {template: "$iam/v1/applications/$app_id"}
-    - method: "DELETE"
-    - headers: {template: {'X-Auth-Token': '$globalToken'}}
-
-- test:
-    - group: "application"
-    - name: "comfirm application has been deleted"
-    - url: {template: "$iam/v1/applications/$app_id"}
-    - headers: {template: {'X-Auth-Token': '$globalToken'}}
-    - validators:
-        - extract_test: {jsonpath_mini: "id", test: "not_exists" }
-
-- test:
     - group: "directory"
     - name: "Create directory"
     - url: {template: "$iam/v1/directories"}
@@ -113,3 +98,228 @@
     - headers: {template: {'X-Auth-Token': '$globalToken'}}
     - validators:
         - compare: {jsonpath_mini: "status", comparator: "eq", expected: "enabled"}
+
+- test:
+    - group: "directory"
+    - name: "Update directory to change status to disabled"
+    - url: {template: "$iam/v1/directories/$dir_id"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"status": "disabled"}'
+
+- test:
+    - group: "directory"
+    - name: "Get directory to confirm status is modified"
+    - url: {template: "$iam/v1/directories/$dir_id"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: "status", comparator: "eq", expected: "disabled"}
+
+- test:
+    - group: "group"
+    - name: "get groups in the directory"
+    - url: {template: "$iam/v1/directories/$dir_id/groups"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: 'size', comparator: "eq", expected: 0}
+
+- test:
+    - group: "group"
+    - name: "create group in the directory"
+    - url: {template: "$iam/v1/directories/$dir_id/groups"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"name": "group01"}'
+    - validators:
+        - extract_test: {jsonpath_mini: "id", test: "exists"}
+    - extract_binds:
+        - 'group_id': {'jsonpath_mini': 'id'}
+
+- test:
+    - group: "group"
+    - name: "get group to comfirm status is enabled."
+    - url: {template: "$iam/v1/groups/$group_id"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: 'status', comparator: "eq", expected: "enabled"}
+
+- test:
+    - group: "group"
+    - name: "update group to modify status to disabled"
+    - url: {template: "$iam/v1/groups/$group_id"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"status": "disabled"}'
+
+- test:
+    - group: "group"
+    - name: "get group to comfirm status is disabled"
+    - url: {template: "$iam/v1/groups/$group_id"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: 'status', comparator: 'eq', expected: 'disabled'}
+
+
+- test:
+    - group: "account"
+    - name: "get accounts in the directory"
+    - url: {template: "$iam/v1/directories/$dir_id/accounts"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: 'size', comparator: 'eq', expected: 0}
+
+- test:
+    - group: "account"
+    - name: "create account in the directory"
+    - url: {template: "$iam/v1/directories/$dir_id/accounts"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"email":"test02@qq.com","password":"123456","username":"test02"}'
+    - validators:
+        - extract_test: {jsonpath_mini: 'id', test: 'exists'}
+    - extract_binds:
+        - 'account_id': {'jsonpath_mini': 'id'}
+
+- test:
+    - group: "account"
+    - name: "get account to confirm status is enabled"
+    - url: {template: "$iam/v1/accounts/$account_id"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validatros:
+        - compare: {jsonpath_mini: 'status', comparator: 'eq', expected: 'enabled'}
+
+- test:
+    - group: "account"
+    - name: "update account to change status to be disabled"
+    - url: {template: "$iam/v1/accounts/$account_id"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"status": "disabled"}'
+
+- test:
+    - group: "account"
+    - name: "get account to confirm status is disabled"
+    - url: {template: "$iam/v1/accounts/$account_id"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: 'status', comparator: 'eq', expected: 'disabled'}
+
+- test:
+    - group: "customData"
+    - name: "get account's customData first time."
+    - url: {template: "$iam/v1/accounts/$account_id/customData"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - extract_test: {jsonpath_mini: 'newyear', test: 'not_exists' }
+
+- test:
+    - group: "customData"
+    - name: "add newyear to account's customData"
+    - url: {template: "$iam/v1/accounts/$account_id/customData"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"newyear": 2017}'
+
+- test:
+    - group: "customData"
+    - name: "get account's customData to confirm newyear attribute"
+    - url: {template: "$iam/v1/accounts/$account_id/customData"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: 'newyear', comparator: 'eq', expected: 2017}
+
+- test:
+    - group: "customData"
+    - name: "get tenant's customData first time."
+    - url: {template: "$iam/v1/tenants/$tenant_id/customData"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - extract_test: {jsonpath_mini: 'newyear', test: 'not_exists' }
+
+- test:
+    - group: "customData"
+    - name: "add newyear attribute to tenant's customData"
+    - url: {template: "$iam/v1/tenants/$tenant_id/customData"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"newyear": 2017}'
+
+- test:
+    - group: "customData"
+    - name: "get tenant's customData to confirm newyear attribute."
+    - url: {template: "$iam/v1/tenants/$tenant_id/customData"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: 'newyear', comparator: 'eq', expected: 2017}
+
+- test:
+    - group: "customData"
+    - name: "get application's customData first time."
+    - url: {template: "$iam/v1/applications/$app_id/customData"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - extract_test: {jsonpath_mini: 'newyear', test: 'not_exists' }
+
+- test:
+    - group: "customData"
+    - name: "add newyear attribute to application's customData"
+    - url: {template: "$iam/v1/applications/$app_id/customData"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"newyear": 2017}'
+
+- test:
+    - group: "customData"
+    - name: "get application's customData to confirm newyear attribute"
+    - url: {template: "$iam/v1/applications/$app_id/customData"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: 'newyear', comparator: 'eq', expected: 2017}
+
+- test:
+    - group: "customData"
+    - name: "get directory's customData first time."
+    - url: {template: "$iam/v1/directories/$dir_id/customData"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - extract_test: {jsonpath_mini: 'newyear', test: 'not_exists' }
+
+- test:
+    - group: "customData"
+    - name: "add newyear attribute to directory's customData"
+    - url: {template: "$iam/v1/directories/$dir_id/customData"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"newyear": 2017}'
+
+- test:
+    - group: "customData"
+    - name: "get directory's customData to confirm newyear attribute"
+    - url: {template: "$iam/v1/directories/$dir_id/customData"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: 'newyear', comparator: 'eq', expected: 2017}
+
+- test:
+    - group: "customData"
+    - name: "get group's customData first time."
+    - url: {template: "$iam/v1/groups/$group_id/customData"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - extract_test: {jsonpath_mini: 'newyear', test: 'not_exists' }
+
+- test:
+    - group: "customData"
+    - name: "add newyear attribute to group's customData"
+    - url: {template: "$iam/v1/groups/$group_id/customData"}
+    - method: "POST"
+    - headers: {template: {'X-Auth-Token': '$globalToken', 'Content-Type': 'application/json'}}
+    - body: '{"newyear": 2017}'
+
+- test:
+    - group: "customData"
+    - name: "get group's customData to confirm newyear attribute"
+    - url: {template: "$iam/v1/groups/$group_id/customData"}
+    - headers: {template: {'X-Auth-Token': '$globalToken'}}
+    - validators:
+        - compare: {jsonpath_mini: 'newyear', comparator: 'eq', expected: 2017}
