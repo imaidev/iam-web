@@ -139,7 +139,8 @@
 			var loginInfo={
 				"tenantKey":tenant,
 				"type":"basic",
-				"value":value
+				"value":value,
+				"token":true
 			};
 			
 			$.ajax({
@@ -149,11 +150,11 @@
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify(loginInfo),
 				success: function(data) {
-					if(data.code=="2000") {
+					if(!('token' in data)) {
 						$("#hints").show();
 						$("#hints").children("p").text(data.message);
 					} else {
-						setCookie("itoken", data.itoken, null);
+						setCookie("itoken", data.token, null);
 						var redirectURL = getRedirectURL();
 						if(getRedirectURL != "" && getRedirectURL != null) {
 							window.location.href = decodeURIComponent(redirectURL);
