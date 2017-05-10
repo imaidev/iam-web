@@ -74,7 +74,7 @@ function init() {
 		viewSucceedArray.push('<div class="sign"><a onclick="login()">登录</a></div>');
 		viewSucceedArray.push('<div class="sign"><a onclick="signup()">注册</a></div>');
 	} else {
-		viewSucceedArray.push('<a data-toggle="dropdown" data-bind="text:userName" class="username"><span id="username">SUPERADMIN</span><span class="caret"></span></a>');
+		viewSucceedArray.push('<a data-toggle="dropdown" data-bind="text:userName" class="username"><span id="username"></span><span class="caret"></span></a>');
 		viewSucceedArray.push('<div class="dropdown-menu ue-dropdown-menu dropdown-menu-right">');
 		/*
 		viewSucceedArray.push('<span class="ue-dropdown-angle"></span>');
