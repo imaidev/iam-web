@@ -154,11 +154,11 @@
 				data: JSON.stringify({"email": un,"username":un,"password": htpassword,"password2":htpassword}),
 				success: function(data) {
 
-					setCookie("tenant", data.key);
+					setCookie("tenant", data.id);
 					
 					$.dialog({
 						type: 'alert',
-						content: '注册成功！tenant为'+data.result+'，请保存tenant key。',
+						content: '注册成功！tenant为'+data.tenantKey+'，请保存tenant key。',
 						autofocus: true,
 						
 					});
